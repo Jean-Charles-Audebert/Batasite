@@ -1,11 +1,15 @@
 import React from 'react';
 
 const ClientCard = ({ client, onClick }) => {
+  const statusStyle = client.active 
+    ? { ...styles.status, ...styles.active }
+    : { ...styles.status, ...styles.inactive };
+
   return (
     <div style={styles.card} onClick={() => onClick(client)}>
       <h3 style={styles.title}>{client.name}</h3>
       <p style={styles.description}>{client.description}</p>
-      <span style={{...styles.status, ...client.active ? styles.active : styles.inactive}}>
+      <span style={statusStyle}>
         {client.active ? 'Actif' : 'Inactif'}
       </span>
     </div>
