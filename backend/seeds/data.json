@@ -1,0 +1,44 @@
+{
+  "clients": [
+    {
+      "name": "Batala La Rochelle",
+      "slug": "batala-la-rochelle",
+      "description": "Groupe de percussion brésilien Batala basé à La Rochelle",
+      "logo_url": "/images/batala-logo.png",
+      "active": true
+    },
+    {
+      "name": "Demo Client",
+      "slug": "demo-client",
+      "description": "Client de démonstration pour tester la structure multi-client",
+      "logo_url": "/images/demo-logo.png",
+      "active": false
+    }
+  ],
+  "content": [
+    {
+      "client_slug": "batala-la-rochelle",
+      "title": "Bienvenue chez Batala La Rochelle",
+      "content_type": "text",
+      "body": "Batala La Rochelle est un groupe de percussion afro-brésilien qui fait vibrer la région depuis plusieurs années. Nous jouons de la samba-reggae, un style musical venant de Salvador de Bahia au Brésil.",
+      "media_url": null,
+      "published": true
+    },
+    {
+      "client_slug": "batala-la-rochelle",
+      "title": "Nos Événements",
+      "content_type": "text",
+      "body": "Nous participons à de nombreux événements culturels et festivals dans la région. Retrouvez-nous lors des défilés, concerts et animations.",
+      "media_url": null,
+      "published": true
+    },
+    {
+      "client_slug": "batala-la-rochelle",
+      "title": "Photo de Groupe",
+      "content_type": "image",
+      "body": "Notre groupe lors d'une performance",
+      "media_url": "/images/batala-group.jpg",
+      "published": true
+    }
+  ]
+}
