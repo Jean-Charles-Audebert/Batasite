@@ -8,8 +8,13 @@ RUN npm run build || true
 # Stage final - serveur web statique
 FROM nginx:alpine
 
-# Copier tous les fichiers du front
-COPY front/ /usr/share/nginx/html/
+# Copier les fichiers HTML, CSS, JS à la racine
+COPY front/index.html /usr/share/nginx/html/
+COPY front/index.css /usr/share/nginx/html/
+COPY front/main.js /usr/share/nginx/html/
+
+# Copier le dossier public avec tous les assets
+COPY front/public/ /usr/share/nginx/html/public/
 
 # Configuration nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
