@@ -4,7 +4,7 @@
 
 @font-face {
     font-family: "Lithos";
-    src: url("/typo/lithosextralight.ttf") format("truetype");
+    src: url("/public/typo/lithosextralight.ttf") format("truetype");
     font-weight: 200;
     font-style: normal;
     font-display: swap;
@@ -12,7 +12,7 @@
 
 @font-face {
     font-family: "Lithos";
-    src: url("/typo/lithoslight.ttf") format("truetype");
+    src: url("/public/typo/lithoslight.ttf") format("truetype");
     font-weight: 300;
     font-style: normal;
     font-display: swap;
@@ -20,7 +20,7 @@
 
 @font-face {
     font-family: "Lithos";
-    src: url("/typo/lithos.ttf") format("truetype");
+    src: url("/public/typo/lithos.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -28,7 +28,7 @@
 
 @font-face {
     font-family: "Lithos";
-    src: url("/typo/lithosbold.ttf") format("truetype");
+    src: url("/public/typo/lithosbold.ttf") format("truetype");
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -36,7 +36,7 @@
 
 @font-face {
     font-family: "Lithos";
-    src: url("/typo/lithosblack.ttf") format("truetype");
+    src: url("/public/typo/lithosblack.ttf") format("truetype");
     font-weight: 900;
     font-style: normal;
     font-display: swap;
