@@ -10,11 +10,15 @@ RUN npm run build || true
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 
-# Copier les fichiers du front
-COPY --from=front-builder /app/front/index.html ./
-COPY --from=front-builder /app/front/index.css ./
-COPY --from=front-builder /app/front/main.js ./
-COPY --from=front-builder /app/front/public/ ./public/
+# Copier tous les fichiers du front (HTML, CSS, JS, images, etc)
+COPY front/index.html ./
+COPY front/index.css ./
+COPY front/main.js ./
+
+# Copier les fichiers publics (images, vidéos, etc) s'ils existent
+# On copie le contenu du dossier public s'il existe, sinon on continue
+RUN mkdir -p ./public
+COPY front/public/ ./public/ || true
 
 # Configuration nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
