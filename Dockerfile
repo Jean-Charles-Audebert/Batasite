@@ -15,10 +15,9 @@ COPY front/index.html ./
 COPY front/index.css ./
 COPY front/main.js ./
 
-# Copier les fichiers publics (images, vidéos, etc) s'ils existent
-# On copie le contenu du dossier public s'il existe, sinon on continue
+# Créer le dossier public et copier son contenu
 RUN mkdir -p ./public
-COPY front/public/ ./public/ || true
+COPY front/public/ ./public/
 
 # Configuration nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
