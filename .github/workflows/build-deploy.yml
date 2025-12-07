@@ -39,31 +39,80 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
     steps:
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.NAS_SSH_KEY }}" > ~/.ssh/nas_key
+        chmod 600 ~/.ssh/nas_key
+        ssh-keyscan -p ${{ secrets.NAS_SSH_PORT }} ${{ secrets.NAS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
+    
     - name: Deploy to NAS via SSH
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.NAS_HOST }}
-        port: ${{ secrets.NAS_SSH_PORT }}
-        username: ${{ secrets.NAS_SSH_USER }}
-        key: ${{ secrets.NAS_SSH_KEY }}
-        script: |
-          cd /volume1/docker/batasite
-          
-          # Arrêter et supprimer l'ancien container
-          docker stop batasite || true
-          docker rm batasite || true
-          
-          # Télécharger la nouvelle image
-          docker pull ${{ secrets.DOCKER_USERNAME }}/batasite:latest
-          
-          # Lancer le nouveau container
-          docker run -d \
+      run: |
+        ssh -i ~/.ssh/nas_key \
+          -p ${{ secrets.NAS_SSH_PORT }} \
+          ${{ secrets.NAS_SSH_USER }}@${{ secrets.NAS_HOST }} << 'EOF'
+        
+        set -e
+        
+        DOCKER_DIR="/volume1/docker/batasite"
+        IMAGE_NAME="${{ secrets.DOCKER_USERNAME }}/batasite:latest"
+        
+        echo "=== Démarrage du déploiement ==="
+        echo "Répertoire : $DOCKER_DIR"
+        echo "Image : $IMAGE_NAME"
+        
+        # Vérifier que le répertoire existe
+        if [ ! -d "$DOCKER_DIR" ]; then
+            echo "❌ Le répertoire $DOCKER_DIR n'existe pas"
+            echo "Créez-le et copiez le .env dedans"
+            exit 1
+        fi
+        
+        # Vérifier que .env existe
+        if [ ! -f "$DOCKER_DIR/.env" ]; then
+            echo "❌ Le fichier .env n'existe pas dans $DOCKER_DIR"
+            exit 1
+        fi
+        
+        cd $DOCKER_DIR
+        
+        # Afficher les images disponibles
+        echo "Images Docker disponibles :"
+        docker images | head -5
+        
+        # Arrêter et supprimer l'ancien container
+        echo "Arrêt de l'ancien container..."
+        docker stop batasite 2>/dev/null || echo "Pas de container en cours"
+        docker rm batasite 2>/dev/null || echo "Container déjà supprimé"
+        
+        # Télécharger la nouvelle image
+        echo "Téléchargement de l'image $IMAGE_NAME..."
+        docker pull $IMAGE_NAME || {
+            echo "❌ Impossible de télécharger l'image"
+            exit 1
+        }
+        
+        # Lancer le nouveau container
+        echo "Lancement du container..."
+        docker run -d \
             --name batasite \
             --restart always \
             -p 3000:80 \
-            --env-file .env \
-            -v /volume1/docker/batasite/.env:/app/.env \
-            ${{ secrets.DOCKER_USERNAME }}/batasite:latest
-          
-          # Afficher le status
-          docker ps -a | grep batasite
+            --env-file $DOCKER_DIR/.env \
+            $IMAGE_NAME
+        
+        # Attendre que le container démarre
+        sleep 3
+        
+        # Vérifier le statut
+        echo ""
+        echo "=== Statut du container ==="
+        docker ps -a | grep batasite || echo "Container non trouvé"
+        
+        echo ""
+        echo "=== Logs du container ==="
+        docker logs --tail 20 batasite || echo "Pas de logs"
+        
+        echo ""
+        echo "✅ Déploiement terminé"
+        EOF
