@@ -1,0 +1,265 @@
+
+> back@1.0.0 test
+> jest --forceExit admin.controller.test.js
+
+  console.log
+    [dotenv@17.2.3] injecting env (16) from .env -- tip: ÔÜÖ´©Å  override existing env vars with { override: true }
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+  console.log
+    [dotenv@17.2.3] injecting env (0) from .env -- tip: ­ƒøá´©Å  run anywhere with `dotenvx run -- yourcommand`
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+  console.log
+    Database config: {
+      user: 'batadmin',
+      host: 'localhost',
+      port: 5434,
+      database: 'batasite'
+    }
+
+      at Object.log (src/config/db.js:12:9)
+
+  console.log
+    [dotenv@17.2.3] injecting env (0) from .env -- tip: ÔÜÖ´©Å  write to custom object with { processEnv: myObject }
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+  console.log
+    Query executed: {
+      queryText: 'SELECT id FROM admins WHERE email = $1',
+      duration: 29,
+      rows: 0
+    }
+
+      at log (src/config/db.js:36:13)
+
+  console.log
+    Query executed: {
+      queryText: 'INSERT INTO admins (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id, email, role, is_active, created_at',
+      duration: 4,
+      rows: 1
+    }
+
+      at log (src/config/db.js:36:13)
+
+  console.log
+    [INFO] Admin created: {
+      id: 62,
+      email: 'admin-test@example.com',
+      role: 'admin',
+      is_active: true,
+      created_at: 2025-12-09T09:20:59.186Z
+    }
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+  console.log
+    Query executed: {
+      queryText: 'SELECT id FROM admins WHERE email = $1',
+      duration: 1,
+      rows: 0
+    }
+
+      at log (src/config/db.js:36:13)
+
+  console.log
+    Query executed: {
+      queryText: 'INSERT INTO admins (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id, email, role, is_active, created_at',
+      duration: 3,
+      rows: 1
+    }
+
+      at log (src/config/db.js:36:13)
+
+  console.log
+    [INFO] Admin created: {
+      id: 63,
+      email: 'test-admin@example.com',
+      role: 'admin',
+      is_active: true,
+      created_at: 2025-12-09T09:20:59.219Z
+    }
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+FAIL src/tests/admin.controller.test.js
+  Admin Management API
+    GET /admin - List all admins
+      ├ù should return array of admins (200) (5 ms)
+      ├ù should return id, email, role, is_active (no password) (2 ms)
+      ÔêÜ should return 401 without JWT (2 ms)
+      ÔêÜ should return 401 with invalid JWT (2 ms)
+      ├ù should filter by role if query param provided (4 ms)
+    GET /admin/:id - Fetch single admin
+      ├ù should return admin by ID (200) (2 ms)
+      ├ù should return id, email, role, is_active (no password) (2 ms)
+      ├ù should return 404 for non-existent admin (3 ms)
+      ├ù should return 400 for invalid admin ID format (2 ms)
+      ÔêÜ should return 401 without JWT (1 ms)
+    GET /admin/:id/activity - Fetch admin activity
+      ├ù should return activity log for admin (4 ms)
+      ÔêÜ should return 401 without JWT (2 ms)
+      ├ù should return 404 for non-existent admin (2 ms)
+
+  ÔùÅ Admin Management API ÔÇ║ GET /admin - List all admins ÔÇ║ should return array of admins (200)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      47 |         .set('Authorization', `Bearer ${authToken}`);
+      48 |
+    > 49 |       expect(response.status).toBe(200);
+         |                               ^
+      50 |       expect(Array.isArray(response.body)).toBe(true);
+      51 |       expect(response.body.length).toBeGreaterThanOrEqual(2);
+      52 |     });
+
+      at Object.toBe (src/tests/admin.controller.test.js:49:31)
+
+  ÔùÅ Admin Management API ÔÇ║ GET /admin - List all admins ÔÇ║ should return id, email, role, is_active (no password)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      57 |         .set('Authorization', `Bearer ${authToken}`);
+      58 |
+    > 59 |       expect(response.status).toBe(200);
+         |                               ^
+      60 |       const admin = response.body[0];
+      61 |       expect(admin).toHaveProperty('id');
+      62 |       expect(admin).toHaveProperty('email');
+
+      at Object.toBe (src/tests/admin.controller.test.js:59:31)
+
+  ÔùÅ Admin Management API ÔÇ║ GET /admin - List all admins ÔÇ║ should filter by role if query param provided
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      85 |         .set('Authorization', `Bearer ${authToken}`);
+      86 |
+    > 87 |       expect(response.status).toBe(200);
+         |                               ^
+      88 |       const hasSuper = response.body.some(a => a.role === 'superadmin');
+      89 |       expect(hasSuper).toBe(true);
+      90 |     });
+
+      at Object.toBe (src/tests/admin.controller.test.js:87:31)
+
+  ÔùÅ Admin Management API ÔÇ║ GET /admin/:id - Fetch single admin ÔÇ║ should return admin by ID (200)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+       97 |         .set('Authorization', `Bearer ${authToken}`);
+       98 |
+    >  99 |       expect(response.status).toBe(200);
+          |                               ^
+      100 |       expect(response.body.id).toBe(testAdminId);
+      101 |       expect(response.body.email).toBe('test-admin@example.com');
+      102 |     });
+
+      at Object.toBe (src/tests/admin.controller.test.js:99:31)
+
+  ÔùÅ Admin Management API ÔÇ║ GET /admin/:id - Fetch single admin ÔÇ║ should return id, email, role, is_active (no password)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      107 |         .set('Authorization', `Bearer ${authToken}`);
+      108 |
+    > 109 |       expect(response.status).toBe(200);
+          |                               ^
+      110 |       expect(response.body).toHaveProperty('id');
+      111 |       expect(response.body).toHaveProperty('email');
+      112 |       expect(response.body).toHaveProperty('role');
+
+      at Object.toBe (src/tests/admin.controller.test.js:109:31)
+
+  ÔùÅ Admin Management API ÔÇ║ GET /admin/:id - Fetch single admin ÔÇ║ should return 404 for non-existent admin
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 404
+    Received: 401
+
+      120 |         .set('Authorization', `Bearer ${authToken}`);
+      121 |
+    > 122 |       expect(response.status).toBe(404);
+          |                               ^
+      123 |     });
+      124 |
+      125 |     test('should return 400 for invalid admin ID format', async () => {
+
+      at Object.toBe (src/tests/admin.controller.test.js:122:31)
+
+  ÔùÅ Admin Management API ÔÇ║ GET /admin/:id - Fetch single admin ÔÇ║ should return 400 for invalid admin ID format
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 401
+
+      128 |         .set('Authorization', `Bearer ${authToken}`);
+      129 |
+    > 130 |       expect(response.status).toBe(400);
+          |                               ^
+      131 |     });
+      132 |
+      133 |     test('should return 401 without JWT', async () => {
+
+      at Object.toBe (src/tests/admin.controller.test.js:130:31)
+
+  ÔùÅ Admin Management API ÔÇ║ GET /admin/:id/activity - Fetch admin activity ÔÇ║ should return activity log for admin
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      149 |         .set('Authorization', `Bearer ${authToken}`);
+      150 |
+    > 151 |       expect(response.status).toBe(200);
+          |                               ^
+      152 |       expect(Array.isArray(response.body)).toBe(true);
+      153 |     });
+      154 |
+
+      at Object.toBe (src/tests/admin.controller.test.js:151:31)
+
+  ÔùÅ Admin Management API ÔÇ║ GET /admin/:id/activity - Fetch admin activity ÔÇ║ should return 404 for non-existent admin
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 404
+    Received: 401
+
+      164 |         .set('Authorization', `Bearer ${authToken}`);
+      165 |
+    > 166 |       expect(response.status).toBe(404);
+          |                               ^
+      167 |     });
+      168 |   });
+      169 | });
+
+      at Object.toBe (src/tests/admin.controller.test.js:166:31)
+
+Test Suites: 1 failed, 1 total
+Tests:       9 failed, 4 passed, 13 total
+Snapshots:   0 total
+Time:        1 s
+Ran all test suites matching admin.controller.test.js.
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?

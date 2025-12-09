@@ -1,0 +1,986 @@
+
+> back@1.0.0 test
+> jest --forceExit admin.controller.test.js|admin.write.test.js|content.controller.test.js
+
+PASS src/tests/admin.write.test.js
+  ÔùÅ Console
+
+    console.log
+      [dotenv@17.2.3] injecting env (16) from .env -- tip: ÔÜÖ´©Å  write to custom object with { processEnv: myObject }
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+    console.log
+      [dotenv@17.2.3] injecting env (0) from .env -- tip: ÔÜÖ´©Å  enable debug logging with { debug: true }
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+    console.log
+      Database config: {
+        user: 'batadmin',
+        host: 'localhost',
+        port: 5434,
+        database: 'batasite'
+      }
+
+      at Object.log (src/config/db.js:12:9)
+
+    console.log
+      [dotenv@17.2.3] injecting env (0) from .env -- tip: ÔÜÖ´©Å  suppress all logs with { quiet: true }
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id FROM admins WHERE email = $1',
+        duration: 22,
+        rows: 0
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'INSERT INTO admins (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id, email, role, is_active, created_at',
+        duration: 5,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Admin created: {
+        id: 75,
+        email: 'admin-write-1765275789672@example.com',
+        role: 'admin',
+        is_active: true,
+        created_at: 2025-12-09T09:23:09.737Z
+      }
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id, email, password_hash, role, is_active FROM admins WHERE email = $1',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Admin logged in: admin-write-1765275789672@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id FROM admins WHERE email = $1',
+        duration: 1,
+        rows: 0
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'INSERT INTO admins (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id, email, role, is_active, created_at',
+        duration: 3,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Admin created: {
+        id: 76,
+        email: 'target-admin-1765275789777@example.com',
+        role: 'admin',
+        is_active: true,
+        created_at: 2025-12-09T09:23:09.802Z
+      }
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Admin 76 updated by: admin-write-1765275789672@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Admin 76 updated by: admin-write-1765275789672@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id FROM admins WHERE email = $1',
+        duration: 1,
+        rows: 0
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'INSERT INTO admins (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id, email, role, is_active, created_at',
+        duration: 3,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Admin created: {
+        id: 77,
+        email: 'temp-admin-1765275789841@example.com',
+        role: 'admin',
+        is_active: true,
+        created_at: 2025-12-09T09:23:09.867Z
+      }
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Admin 77 deleted by: admin-write-1765275789672@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+PASS src/tests/admin.controller.test.js
+  ÔùÅ Console
+
+    console.log
+      [dotenv@17.2.3] injecting env (16) from .env -- tip: ­ƒæÑ sync secrets across teammates & machines: https://dotenvx.com/ops
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+    console.log
+      [dotenv@17.2.3] injecting env (0) from .env -- tip: ­ƒôí add observability to secrets: https://dotenvx.com/ops
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+    console.log
+      Database config: {
+        user: 'batadmin',
+        host: 'localhost',
+        port: 5434,
+        database: 'batasite'
+      }
+
+      at Object.log (src/config/db.js:12:9)
+
+    console.log
+      [dotenv@17.2.3] injecting env (0) from .env -- tip: ÔÜÖ´©Å  specify custom .env file path with { path: '/custom/path/.env' }
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id FROM admins WHERE email = $1',
+        duration: 12,
+        rows: 0
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'INSERT INTO admins (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id, email, role, is_active, created_at',
+        duration: 3,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Admin created: {
+        id: 78,
+        email: 'admin-1765275790044@example.com',
+        role: 'admin',
+        is_active: true,
+        created_at: 2025-12-09T09:23:10.087Z
+      }
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id, email, password_hash, role, is_active FROM admins WHERE email = $1',
+        duration: 3,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Admin logged in: admin-1765275790044@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id FROM admins WHERE email = $1',
+        duration: 1,
+        rows: 0
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'INSERT INTO admins (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id, email, role, is_active, created_at',
+        duration: 3,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Admin created: {
+        id: 79,
+        email: 'test-admin-1765275790120@example.com',
+        role: 'admin',
+        is_active: true,
+        created_at: 2025-12-09T09:23:10.146Z
+      }
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Admin list retrieved by: admin-1765275790044@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Admin list retrieved by: admin-1765275790044@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Admin list retrieved by: admin-1765275790044@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Admin 79 retrieved by: admin-1765275790044@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Admin 79 retrieved by: admin-1765275790044@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Admin list retrieved by: admin-1765275790044@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Admin 78 activity retrieved by: admin-1765275790044@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+PASS src/tests/content.controller.test.js
+  ÔùÅ Console
+
+    console.log
+      [dotenv@17.2.3] injecting env (16) from .env -- tip: ­ƒöæ add access controls to secrets: https://dotenvx.com/ops
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+    console.log
+      [dotenv@17.2.3] injecting env (0) from .env -- tip: ­ƒöÉ prevent committing .env to code: https://dotenvx.com/precommit
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+    console.log
+      Database config: {
+        user: 'batadmin',
+        host: 'localhost',
+        port: 5434,
+        database: 'batasite'
+      }
+
+      at Object.log (src/config/db.js:12:9)
+
+    console.log
+      [dotenv@17.2.3] injecting env (0) from .env -- tip: ÔÜÖ´©Å  load multiple .env files with { path: ['.env.local', '.env'] }
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+    console.log
+      Query executed: {
+        queryText: 'INSERT INTO admins (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id',
+        duration: 12,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'INSERT INTO content (content, updated_by) VALUES ($1, $2)',
+        duration: 4,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id, content, updated_at FROM content ORDER BY id DESC LIMIT 1',
+        duration: 2,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content retrieved by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: { queryText: 'DELETE FROM content', duration: 3, rows: 1 }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id, content, updated_at FROM content ORDER BY id DESC LIMIT 1',
+        duration: 1,
+        rows: 0
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'INSERT INTO content (content) VALUES ($1) RETURNING id, content, updated_at',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content retrieved by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: { queryText: 'DELETE FROM content', duration: 3, rows: 1 }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'INSERT INTO content (content, updated_by) VALUES ($1, $2)',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id, content, updated_at FROM content ORDER BY id DESC LIMIT 1',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content retrieved by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id FROM content ORDER BY id DESC LIMIT 1',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'UPDATE content SET content = $1, updated_at = CURRENT_TIMESTAMP, updated_by = $2 WHERE id = $3 RETURNING id, content, updated_at, updated_by',
+        duration: 2,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content updated by admin: 80
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Content updated by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id FROM content ORDER BY id DESC LIMIT 1',
+        duration: 2,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'UPDATE content SET content = $1, updated_at = CURRENT_TIMESTAMP, updated_by = $2 WHERE id = $3 RETURNING id, content, updated_at, updated_by',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content updated by admin: 80
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Content updated by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id FROM content ORDER BY id DESC LIMIT 1',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'UPDATE content SET content = $1, updated_at = CURRENT_TIMESTAMP, updated_by = $2 WHERE id = $3 RETURNING id, content, updated_at, updated_by',
+        duration: 2,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content updated by admin: 80
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Content updated by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id FROM content ORDER BY id DESC LIMIT 1',
+        duration: 2,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'UPDATE content SET content = $1, updated_at = CURRENT_TIMESTAMP, updated_by = $2 WHERE id = $3 RETURNING id, content, updated_at, updated_by',
+        duration: 2,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content updated by admin: 80
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Content updated by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.error
+      Error: Error: "data" must be of type object
+          at updateContent (C:\Workspaces\Perso\Batasite\back\src\controllers\content.controller.js:36:19)
+          at Layer.handleRequest (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\layer.js:152:17)
+          at next (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\route.js:157:13)
+          at Route.dispatch (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\route.js:117:3)
+          at handle (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:435:11)
+          at Layer.handleRequest (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\layer.js:152:17)
+          at C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:295:15
+          at processParams (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:582:12)
+          at next (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:291:5)
+          at next (C:\Workspaces\Perso\Batasite\back\src\middleware\auth.js:22:3)
+          at Layer.handleRequest (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\layer.js:152:17)
+          at trimPrefix (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:342:13)
+          at C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:297:9
+          at processParams (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:582:12)
+          at next (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:291:5)
+          at router.handle (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:186:3)
+          at router (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:60:12)
+          at Layer.handleRequest (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\layer.js:152:17)
+          at trimPrefix (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:342:13)
+          at C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:297:9
+          at processParams (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:582:12)
+          at next (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:291:5)
+          at next (C:\Workspaces\Perso\Batasite\back\src\server.js:20:3)
+          at Layer.handleRequest (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\layer.js:152:17)
+          at trimPrefix (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:342:13)
+          at C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:297:9
+          at processParams (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:582:12)
+          at next (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:291:5)
+          at read (C:\Workspaces\Perso\Batasite\back\node_modules\body-parser\lib\read.js:43:5)
+          at urlencodedParser (C:\Workspaces\Perso\Batasite\back\node_modules\body-parser\lib\types\urlencoded.js:58:5)
+          at Layer.handleRequest (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\layer.js:152:17)
+          at trimPrefix (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:342:13)
+          at C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:297:9
+          at processParams (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:582:12)
+          at next (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:291:5)
+          at C:\Workspaces\Perso\Batasite\back\node_modules\body-parser\lib\read.js:172:5
+          at AsyncResource.runInAsyncScope (node:async_hooks:214:14)
+          at invokeCallback (C:\Workspaces\Perso\Batasite\back\node_modules\raw-body\index.js:238:16)
+          at done (C:\Workspaces\Perso\Batasite\back\node_modules\raw-body\index.js:227:7)
+          at IncomingMessage.onEnd (C:\Workspaces\Perso\Batasite\back\node_modules\raw-body\index.js:287:7)
+          at IncomingMessage.emit (node:events:508:28)
+          at endReadableNT (node:internal/streams/readable:1701:12)
+          at processTicksAndRejections (node:internal/process/task_queues:90:21) {
+        status: 400
+      }
+
+      38 | // Error handler
+      39 | app.use((err, req, res, next) => {
+    > 40 |   console.error('Error:', err);
+         |           ^
+      41 |   res.status(err.status || 500).json({
+      42 |     error: err.message || 'Internal Server Error',
+      43 |     ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+
+      at error (src/server.js:40:11)
+      at Layer.handleError (node_modules/router/lib/layer.js:116:17)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at Layer.handleError (node_modules/router/lib/layer.js:111:12)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at node_modules/router/index.js:688:15
+      at next (node_modules/router/index.js:276:14)
+      at next (node_modules/router/lib/route.js:132:14)
+      at next (src/controllers/content.controller.js:38:14)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib/route.js:157:13)
+      at Route.dispatch (node_modules/router/lib/route.js:117:3)
+      at handle (node_modules/router/index.js:435:11)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at node_modules/router/index.js:295:15
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at next (src/middleware/auth.js:22:3)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at router.handle (node_modules/router/index.js:186:3)
+      at router (node_modules/router/index.js:60:12)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at next (src/server.js:20:3)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at read (node_modules/body-parser/lib/read.js:43:5)
+      at urlencodedParser (node_modules/body-parser/lib/types/urlencoded.js:58:5)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at node_modules/body-parser/lib/read.js:172:5
+      at invokeCallback (node_modules/raw-body/index.js:238:16)
+      at done (node_modules/raw-body/index.js:227:7)
+      at IncomingMessage.onEnd (node_modules/raw-body/index.js:287:7)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id FROM content ORDER BY id DESC LIMIT 1',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'UPDATE content SET content = $1, updated_at = CURRENT_TIMESTAMP, updated_by = $2 WHERE id = $3 RETURNING id, content, updated_at, updated_by',
+        duration: 2,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content updated by admin: 80
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Content updated by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: { queryText: 'DELETE FROM content', duration: 2, rows: 1 }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'INSERT INTO content (content, updated_by) VALUES ($1, $2)',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id, content, updated_at FROM content ORDER BY id DESC LIMIT 1',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id FROM content ORDER BY id DESC LIMIT 1',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'UPDATE content SET content = $1, updated_at = CURRENT_TIMESTAMP, updated_by = $2 WHERE id = $3 RETURNING id, content, updated_at, updated_by',
+        duration: 2,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content updated by admin: 80
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Content patched by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: { queryText: 'DELETE FROM content', duration: 1, rows: 1 }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'INSERT INTO content (content, updated_by) VALUES ($1, $2)',
+        duration: 2,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id, content, updated_at FROM content ORDER BY id DESC LIMIT 1',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT id FROM content ORDER BY id DESC LIMIT 1',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'UPDATE content SET content = $1, updated_at = CURRENT_TIMESTAMP, updated_by = $2 WHERE id = $3 RETURNING id, content, updated_at, updated_by',
+        duration: 2,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content updated by admin: 80
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      [INFO] Content patched by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.error
+      Error: Error: "data" must be of type object
+          at patchContent (C:\Workspaces\Perso\Batasite\back\src\controllers\content.controller.js:63:19)
+          at Layer.handleRequest (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\layer.js:152:17)
+          at next (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\route.js:157:13)
+          at Route.dispatch (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\route.js:117:3)
+          at handle (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:435:11)
+          at Layer.handleRequest (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\layer.js:152:17)
+          at C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:295:15
+          at processParams (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:582:12)
+          at next (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:291:5)
+          at next (C:\Workspaces\Perso\Batasite\back\src\middleware\auth.js:22:3)
+          at Layer.handleRequest (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\layer.js:152:17)
+          at trimPrefix (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:342:13)
+          at C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:297:9
+          at processParams (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:582:12)
+          at next (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:291:5)
+          at router.handle (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:186:3)
+          at router (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:60:12)
+          at Layer.handleRequest (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\layer.js:152:17)
+          at trimPrefix (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:342:13)
+          at C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:297:9
+          at processParams (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:582:12)
+          at next (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:291:5)
+          at next (C:\Workspaces\Perso\Batasite\back\src\server.js:20:3)
+          at Layer.handleRequest (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\layer.js:152:17)
+          at trimPrefix (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:342:13)
+          at C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:297:9
+          at processParams (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:582:12)
+          at next (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:291:5)
+          at read (C:\Workspaces\Perso\Batasite\back\node_modules\body-parser\lib\read.js:43:5)
+          at urlencodedParser (C:\Workspaces\Perso\Batasite\back\node_modules\body-parser\lib\types\urlencoded.js:58:5)
+          at Layer.handleRequest (C:\Workspaces\Perso\Batasite\back\node_modules\router\lib\layer.js:152:17)
+          at trimPrefix (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:342:13)
+          at C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:297:9
+          at processParams (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:582:12)
+          at next (C:\Workspaces\Perso\Batasite\back\node_modules\router\index.js:291:5)
+          at C:\Workspaces\Perso\Batasite\back\node_modules\body-parser\lib\read.js:172:5
+          at AsyncResource.runInAsyncScope (node:async_hooks:214:14)
+          at invokeCallback (C:\Workspaces\Perso\Batasite\back\node_modules\raw-body\index.js:238:16)
+          at done (C:\Workspaces\Perso\Batasite\back\node_modules\raw-body\index.js:227:7)
+          at IncomingMessage.onEnd (C:\Workspaces\Perso\Batasite\back\node_modules\raw-body\index.js:287:7)
+          at IncomingMessage.emit (node:events:508:28)
+          at endReadableNT (node:internal/streams/readable:1701:12)
+          at processTicksAndRejections (node:internal/process/task_queues:90:21) {
+        status: 400
+      }
+
+      38 | // Error handler
+      39 | app.use((err, req, res, next) => {
+    > 40 |   console.error('Error:', err);
+         |           ^
+      41 |   res.status(err.status || 500).json({
+      42 |     error: err.message || 'Internal Server Error',
+      43 |     ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+
+      at error (src/server.js:40:11)
+      at Layer.handleError (node_modules/router/lib/layer.js:116:17)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at Layer.handleError (node_modules/router/lib/layer.js:111:12)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at node_modules/router/index.js:688:15
+      at next (node_modules/router/index.js:276:14)
+      at next (node_modules/router/lib/route.js:132:14)
+      at next (src/controllers/content.controller.js:65:14)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib/route.js:157:13)
+      at Route.dispatch (node_modules/router/lib/route.js:117:3)
+      at handle (node_modules/router/index.js:435:11)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at node_modules/router/index.js:295:15
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at next (src/middleware/auth.js:22:3)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at router.handle (node_modules/router/index.js:186:3)
+      at router (node_modules/router/index.js:60:12)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at next (src/server.js:20:3)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at read (node_modules/body-parser/lib/read.js:43:5)
+      at urlencodedParser (node_modules/body-parser/lib/types/urlencoded.js:58:5)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at trimPrefix (node_modules/router/index.js:342:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at next (node_modules/router/index.js:291:5)
+      at node_modules/body-parser/lib/read.js:172:5
+      at invokeCallback (node_modules/raw-body/index.js:238:16)
+      at done (node_modules/raw-body/index.js:227:7)
+      at IncomingMessage.onEnd (node_modules/raw-body/index.js:287:7)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT c.id, c.content, c.updated_at, a.email \n' +
+          '       FROM content c\n' +
+          '       LEFT JOIN admins a ON c.updated_by = a.id\n' +
+          '       ORDER BY c.updated_at DESC\n' +
+          '       LIMIT $1',
+        duration: 3,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content history retrieved by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: { queryText: 'DELETE FROM content', duration: 2, rows: 1 }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'INSERT INTO content (content, updated_by) VALUES ($1, $2)',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT c.id, c.content, c.updated_at, a.email \n' +
+          '       FROM content c\n' +
+          '       LEFT JOIN admins a ON c.updated_by = a.id\n' +
+          '       ORDER BY c.updated_at DESC\n' +
+          '       LIMIT $1',
+        duration: 2,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content history retrieved by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT c.id, c.content, c.updated_at, a.email \n' +
+          '       FROM content c\n' +
+          '       LEFT JOIN admins a ON c.updated_by = a.id\n' +
+          '       ORDER BY c.updated_at DESC\n' +
+          '       LIMIT $1',
+        duration: 2,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content history retrieved by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT c.id, c.content, c.updated_at, a.email \n' +
+          '       FROM content c\n' +
+          '       LEFT JOIN admins a ON c.updated_by = a.id\n' +
+          '       ORDER BY c.updated_at DESC\n' +
+          '       LIMIT $1',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content history retrieved by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: {
+        queryText: 'SELECT c.id, c.content, c.updated_at, a.email \n' +
+          '       FROM content c\n' +
+          '       LEFT JOIN admins a ON c.updated_by = a.id\n' +
+          '       ORDER BY c.updated_at DESC\n' +
+          '       LIMIT $1',
+        duration: 1,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      [INFO] Content history retrieved by: content-test@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+    console.log
+      Query executed: {
+        queryText: 'DELETE FROM content WHERE updated_by = $1',
+        duration: 2,
+        rows: 1
+      }
+
+      at log (src/config/db.js:36:13)
+
+    console.log
+      Query executed: { queryText: 'DELETE FROM admins WHERE id = $1', duration: 3, rows: 1 }
+
+      at log (src/config/db.js:36:13)
+
+
+Test Suites: 3 passed, 3 total
+Tests:       46 passed, 46 total
+Snapshots:   0 total
+Time:        1.331 s
+Ran all test suites matching admin.controller.test.js|admin.write.test.js|content.controller.test.js.
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
