@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
+import { ContentPage } from './ContentPage';
 import styles from './DashboardPage.module.css';
 
 /**
@@ -70,14 +71,10 @@ export function DashboardPage() {
 }
 
 /**
- * Section contenu (US-2.3)
+ * Section contenu (US-2.2)
  */
 function ContentSection() {
-  return (
-    <div>
-      <p>Section contenu - À implémenter (US-2.3)</p>
-    </div>
-  );
+  return <ContentPage />;
 }
 
 /**
