@@ -1,5 +1,5 @@
 const express = require('express');
-const { initDb, testConnection } = require('./config/db');
+const { initDb, seedAdmins, testConnection } = require('./config/db');
 const logger = require('./utils/logger');
 require('dotenv').config();
 
@@ -58,6 +58,9 @@ const startServer = async () => {
 
     // Initialise les tables
     await initDb();
+
+    // Seed des admins par défaut
+    await seedAdmins();
 
     // Démarre le serveur
     app.listen(PORT, () => {

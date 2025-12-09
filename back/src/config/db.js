@@ -85,6 +85,58 @@ const initDb = async () => {
 };
 
 /**
+ * Seed des admins par défaut (si table vide)
+ */
+const seedAdmins = async () => {
+  try {
+    const { hash } = require('argon2');
+
+    // Vérifier si des admins existent déjà
+    const res = await query('SELECT COUNT(*) as count FROM admins');
+    if (res.rows[0].count > 0) {
+      console.log(`✓ Admins already seeded (${res.rows[0].count} found)`);
+      return;
+    }
+
+    console.log('Seeding default admins...');
+
+    // Admin par défaut
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@batasite.local';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'AdminPassword123!';
+    const adminHash = await hash(adminPassword, { type: 2 });
+    
+    await query(
+      `INSERT INTO admins (email, password_hash, role, is_active) 
+       VALUES ($1, $2, $3, $4)`,
+      [adminEmail, adminHash, 'admin', true]
+    );
+
+    // Superadmin par défaut
+    const superadminEmail = process.env.SUPER_ADMIN_EMAIL || 'superadmin@batasite.local';
+    const superadminPassword = process.env.SUPER_ADMIN_PASSWORD || 'SuperAdminPassword123!';
+    const superadminHash = await hash(superadminPassword, { type: 2 });
+    
+    await query(
+      `INSERT INTO admins (email, password_hash, role, is_active) 
+       VALUES ($1, $2, $3, $4)`,
+      [superadminEmail, superadminHash, 'superadmin', true]
+    );
+
+    console.log('✓ Default admins seeded successfully');
+    console.log(`  • Admin: ${adminEmail}`);
+    console.log(`  • Superadmin: ${superadminEmail}`);
+  } catch (error) {
+    // Ignorer si les admins existent déjà
+    if (error.message.includes('duplicate key')) {
+      console.log('✓ Admins already exist, skipping seed');
+      return;
+    }
+    console.error('Error seeding admins:', error);
+    throw error;
+  }
+};
+
+/**
  * Teste la connexion à la base de données
  */
 const testConnection = async () => {
@@ -114,6 +166,7 @@ module.exports = {
   query,
   pool,
   initDb,
+  seedAdmins,
   testConnection,
   closePool,
 };
