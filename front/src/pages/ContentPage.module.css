@@ -250,7 +250,23 @@ button:disabled {
   font-family: 'Courier New', monospace;
 }
 
-/* Responsive */
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .container {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+
+  .header h2 {
+    font-size: 1.5rem;
+  }
+
+  .item {
+    grid-template-columns: 120px 1fr;
+    gap: 0.75rem;
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 1rem;
@@ -259,19 +275,120 @@ button:disabled {
   .header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .header h2 {
+    font-size: 1.25rem;
   }
 
   .actions {
     width: 100%;
+    flex-direction: row;
     justify-content: flex-start;
+    gap: 0.5rem;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.875rem;
   }
 
   .item {
     grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .item dt {
+    font-size: 0.875rem;
+  }
+
+  .item dd {
+    font-size: 0.8rem;
+    max-height: 120px;
   }
 
   .historyItem {
     flex-direction: column;
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .restoreButton {
+    width: 100%;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .editor {
+    max-width: 100%;
+  }
+
+  .formGroup {
+    margin-bottom: 1rem;
+  }
+
+  .formGroup label {
+    font-size: 0.9rem;
+  }
+
+  .formGroup textarea,
+  .formGroup input {
+    font-size: 1rem; /* Prevent zoom on iOS */
+    width: 100%;
+  }
+
+  .historyList {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .header h2 {
+    font-size: 1rem;
+  }
+
+  .actions {
+    flex-wrap: wrap;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .item {
+    padding: 0.5rem;
+  }
+
+  .item dt {
+    font-size: 0.75rem;
+  }
+
+  .item dd {
+    font-size: 0.75rem;
+    max-height: 100px;
+  }
+
+  .historyInfo p {
+    font-size: 0.75rem;
+  }
+
+  .restoreButton {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .closeButton {
+    padding: 0.25rem;
+    font-size: 1.25rem;
   }
 }
