@@ -1,0 +1,521 @@
+{
+  "page": {
+    "favicon": "public/favicon.ico",
+    "title": "Batala La Rochelle",
+    "lang": "fr",
+    "font-family": "Lithos, sans-serif",
+    "font-weight": 900,
+    "background": {
+      "type": "color",
+      "value": "#ffffff"
+    }
+  },
+  "hero": {
+    "video": {
+      "src": "public/header.mp4",
+      "type": "local",
+      "visible": true
+    },
+    "logo": {
+      "src": "",
+      "visible": false
+    },
+    "title": {
+      "text": "",
+      "visible": false
+    },
+    "navLinks": {
+      "visible": true,
+      "style": {
+        "color": "#ffffff",
+        "font-size": "1.3rem",
+        "font-family": "",
+        "background-color": ""
+      },
+      "position": {
+        "grid-column": "2/5",
+        "justify-content": "flex-end"
+      },
+      "items": [
+        {
+          "label": "Agenda",
+          "text": "Agenda",
+          "href": "#events",
+          "visible": true
+        },
+        {
+          "label": "Mundo",
+          "text": "Mundo",
+          "href": "#mundo",
+          "visible": true
+        },
+        {
+          "label": "Galerie",
+          "text": "Photos",
+          "href": "#gallery",
+          "visible": true
+        },
+        {
+          "label": "Contact",
+          "text": "Contact",
+          "href": "#contact-modal",
+          "visible": true,
+          "action": "modal"
+        }
+      ]
+    },
+    "socialLinks": {
+      "visible": true,
+      "style": {
+        "color": "#ffffff",
+        "font-size": "1.8rem",
+        "gap": "1rem"
+      },
+      "position": {
+        "grid-column": "9/13",
+        "justify-content": "flex-start"
+      },
+      "items": [
+        {
+          "label": "Facebook",
+          "icon": "fa-brands fa-facebook",
+          "href": "https://www.facebook.com/batalalarochelle",
+          "visible": true
+        },
+        {
+          "label": "Instagram",
+          "icon": "fa-brands fa-instagram",
+          "href": "https://www.instagram.com/batalalarochelle/",
+          "visible": true
+        },
+        {
+          "label": "YouTube",
+          "icon": "fa-brands fa-youtube",
+          "href": "https://www.youtube.com/channel/UC2nkR0cyMLRxYs1yk1ktHgQ",
+          "visible": true
+        }
+      ]
+    }
+  },
+  "sections": [
+    {
+      "type": "presentation",
+      "id": "presentation",
+      "title": "Batala La Rochelle",
+      "visible": true,
+      "style": {
+        "background-color": "",
+        "border-radius": "0",
+        "box-shadow": "none"
+      },
+      "position": {
+        "grid-column": "2/12"
+      },
+          "src": "public/pres_deco.png",
+          "alt": "Présentation de Batala",
+          "grid-column": "span 5"
+        },
+        "text": [
+          "Nous appartenons à Batala, groupe international composé de plus de 3000 percussionnistes répartis sur 4 continents ! En 2000, Giba Gonçalves, d'origine bahianaise (NE Brésil), créa notre groupe rochelais avec une quinzaine de membres, qui travaillèrent intensément pour effectuer les premières sorties en public.",
+          "Peu à peu, notre association s'est agrandie, attirant des personnes conquises par cette musique. Aujourd'hui, une cinquantaine de musiciens, de tous âges et de différents horizons, participe à la vie de notre association et assure la promotion de la culture brésilienne.",
+          "Ouverts à tous, nous invitons régulièrement d'autres batucadas et groupes Batala. Nous participons régulièrement à des rencontres inter-batucadas (ex : Nuits Frappées de Bruniquel) pour partager un stage, un week-end convivial, une prestation, un concert …",
+          "Nous sillonnons la France et l'Europe, participons avec énergie et bonne humeur aux animations culturelles de plein air (fêtes de quartiers, carnavals de rue, festivals, évènements sportifs, fêtes communales), mais aussi sur scène ou lors de soirées privées."
+        ],
+        "title_style": {
+          "font-size": "2.5rem",
+          "color": "#000",
+          "font-family": "",
+          "font-weight": ""
+        },
+        "text_style": {
+          "font-size": "1rem",
+          "color": "#000",
+          "font-family": "",
+          "line-height": "1.5"
+        }
+      }
+    },
+    {
+      "type": "separator",
+      "id": "separator-pres",
+      "media": {
+        "src": "public/pres_bg.png",
+        "type": "image",
+        "alt": "Décoration présentation"
+      },
+      "style": {
+        "margin-top": "-12rem",
+        "z-index": 5
+      },
+      "visible": true
+    },
+    {
+      "type": "events",
+      "id": "events",
+      "title": "Évènements à venir",
+      "visible": true,
+      "style": {
+        "background-color": "",
+        "background-image": "public/haches_bg.png",
+        "border-radius": "0"
+      },
+      "position": {
+        "grid-column": "2/11"
+      },
+      "title_style": {
+        "font-size": "2.5rem",
+        "text-align": "center",
+        "color": "#000",
+        "margin-bottom": "3rem"
+      },
+      "card_style": {
+        "background-color": "#bdbcbc",
+        "border-radius": "1px",
+        "box-shadow": "0 8px 16px rgba(0, 0, 0, 0.2)",
+        "padding": "1.5rem"
+      },
+      "card_title_style": {
+        "font-size": "1rem",
+        "color": "#000"
+      },
+      "card_description_style": {
+        "font-size": "0.95rem",
+        "color": "#000",
+        "line-height": "1.5"
+      },
+      "events": [
+        {
+          "id": "event-1",
+          "image": "public/fab.jpg",
+          "title": "Téléthon 2025",
+          "description": "Batala La Rochelle jouera à la soirée de soutien au Téléthon samedi 6 décembre à l'Espace Bernard Giraudeau à partir de 18h! Venez nombreux.ses !!!",
+          "visible": true
+        },
+        {
+          "id": "event-2",
+          "image": "public/fab.jpg",
+          "title": "Carnaval de Thairé",
+          "description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea",
+          "visible": true
+        },
+        {
+          "id": "event-3",
+          "image": "public/fab.jpg",
+          "title": "Les mimosas à Saint Trojean",
+          "description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "type": "separator",
+      "id": "separator-1",
+      "media": {
+        "src": "public/separator_red.mp4",
+        "type": "video",
+        "alt": ""
+      },
+      "style": {
+        "margin-top": "-12rem",
+        "z-index": 5
+      },
+      "visible": true
+    },
+    {
+      "type": "mundo",
+      "id": "mundo",
+      "title": "Batala Mundo",
+      "visible": true,
+      "style": {
+        "background-color": "#fff",
+        "background-image": "public/feuille.png",
+        "background-repeat": "no-repeat",
+        "background-position": "right"
+      },
+      "position": {
+        "grid-column": "1/-1"
+      },
+      "title_style": {
+        "font-size": "2.5rem",
+        "text-align": "center",
+        "color": "#000",
+        "margin-bottom": "2rem"
+      },
+      "text_style": {
+        "font-size": "0.95rem",
+        "color": "#000",
+        "line-height": "1.6"
+      },
+      "media_style": {
+        "width": "100%",
+        "margin-bottom": "2rem",
+        "border-radius": "0"
+      },
+      "content": {
+        "media": {
+          "src": "public/globe.mp4",
+          "type": "video",
+          "alt": "Mundo Batala"
+        },
+        "text": [
+          "Giba Gonçalves comptait parmi les joueurs de groupes culturels brésiliens originaires de Bahia : les blocos afros Ilê Aiyê, Olodum et Kaoma. Arrivé en Europe, il décide de créer sa propre batucada à Paris en 1997 : Batala.",
+          "Son but premier : mettre des groupes de percussions dans les rues afin de retrouver l'ambiance chaleureuse de sa ville d'origine, Salvador.",
+          "Batala La Rochelle est le second groupe fondé après celui de Paris, puis suivirent d'autres groupes (Portsmouth, Nantes, Bruxelles,…). Depuis, plus de 30 groupes Batala existent à travers le monde, dont cinq en France (Paris, La Rochelle, Nantes, Massif, Gwada), jouant tous les morceaux composés par Giba.",
+          "Batala se produit ainsi dans le monde entier et se réunit au moins trois fois par an, dont voici les trois plus grands évènements (parmi tant d'autres !) :",
+          "Le carnaval de Salvador de Bahia (Brésil), où nous défilons aux côtés du bloco Cortejo Afro depuis 1999. Le carnaval de Nothing Hill (Londres, Angleterre), auquel nous participons depuis 2002. Lors d'un Encontro (signifie « rencontre » en portugais) : l'une des villes où Batala existe organise une rencontre de tous les percussionnistes Batala, réunissant ainsi jusqu'à plus de 300 joueurs défilant dans les rues !"
+        ]
+      }
+    },
+    {
+      "type": "separator",
+      "id": "separator-2",
+      "media": {
+        "src": "public/separator_black.mp4",
+        "type": "video",
+        "alt": ""
+      },
+      "style": {
+        "margin-top": "-12rem",
+        "z-index": 5
+      },
+      "visible": true
+    },
+    {
+      "type": "gallery",
+      "id": "gallery",
+      "title": "Photos & Vidéos",
+      "visible": true,
+      "style": {
+        "background-color": "#fff",
+        "background-image": ""
+      },
+      "position": {
+        "grid-column": "2/12"
+      },
+      "title_style": {
+        "font-size": "2.5rem",
+        "text-align": "center",
+        "color": "#000",
+        "margin-bottom": "3rem"
+      },
+      "image_style": {
+        "border-radius": "0",
+        "box-shadow": "none",
+        "filter": "grayscale(0%)",
+        "filter_hover": "grayscale(100%)"
+      },
+      "gallery_layout": {
+        "display": "grid",
+        "grid-template-columns": "repeat(3, 1fr)",
+        "gap": "1rem"
+      },
+      "images": [
+        {
+          "id": "img-1",
+          "src": "public/fab.jpg",
+          "alt": "Photo de Batala La Rochelle en performance extérieure",
+          "link": "public/fab.jpg",
+          "visible": true
+        },
+        {
+          "id": "img-2",
+          "src": "public/japan.png",
+          "alt": "Photo de Batala La Rochelle en performance extérieure",
+          "link": "public/japan.png",
+          "visible": true
+        },
+        {
+          "id": "img-3",
+          "src": "public/japan2.jpg",
+          "alt": "Photo de Batala La Rochelle en performance extérieure",
+          "link": "public/japan2.jpg",
+          "visible": true
+        },
+        {
+          "id": "img-4",
+          "src": "public/fab.jpg",
+          "alt": "Photo de Batala La Rochelle en performance extérieure",
+          "link": "public/fab.jpg",
+          "visible": true
+        },
+        {
+          "id": "img-5",
+          "src": "public/japan.png",
+          "alt": "Photo de Batala La Rochelle en performance extérieure",
+          "link": "public/japan.png",
+          "visible": true
+        },
+        {
+          "id": "img-6",
+          "src": "public/japan2.jpg",
+          "alt": "Photo de Batala La Rochelle en performance extérieure",
+          "link": "public/japan2.jpg",
+          "visible": true
+        }
+      ],
+      "videos": [
+        {
+          "id": "video-1",
+          "src": "2WPplCREC1c",
+          "type": "youtube",
+          "title": "YouTube video player",
+          "visible": true
+        },
+        {
+          "id": "video-2",
+          "src": "xbZVTo_9Bfg",
+          "type": "youtube",
+          "title": "YouTube video player",
+          "visible": true
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "style": {
+      "background-image": "url(/public/footer.png)",
+      "background-repeat": "no-repeat",
+      "background-size": "cover",
+      "background-position": "center",
+      "color": "#fff",
+      "padding": "4rem 2rem 2rem 2rem",
+      "margin-top": "-25rem",
+      "height": "400px",
+      "position": "relative",
+      "z-index": 10
+    },
+    "position": {
+      "grid-column": "1/-1",
+      "display": "flex",
+      "justify-content": "center",
+      "align-items": "center"
+    },
+    "navLinks": {
+      "visible": true,
+      "style": {
+        "gap": "2rem",
+        "display": "flex"
+      },
+      "items": [
+        {
+          "label": "Accueil",
+          "text": "Accueil",
+          "href": "#",
+          "visible": true
+        },
+        {
+          "label": "À propos",
+          "text": "À propos",
+          "href": "#presentation",
+          "visible": true
+        },
+        {
+          "label": "Agenda",
+          "text": "Agenda",
+          "href": "#agenda",
+          "visible": true
+        },
+        {
+          "label": "Mundo",
+          "text": "Mundo",
+          "href": "#mundo",
+          "visible": true
+        },
+        {
+          "label": "Galerie",
+          "text": "Photos",
+          "href": "#gallery",
+          "visible": true
+        }
+      ]
+    },
+    "contact": {
+      "label": "Contactez-nous",
+      "text": "Contactez-nous",
+      "visible": true,
+      "action": "modal",
+      "style": {
+        "background-color": "#e01c1c",
+        "color": "#fff",
+        "padding": "0.5rem 1rem",
+        "border-radius": "4px",
+        "cursor": "pointer"
+      }
+    },
+    "socialLinks": {
+      "visible": true,
+      "style": {
+        "gap": "1rem",
+        "display": "flex"
+      },
+      "items": [
+        {
+          "label": "Facebook",
+          "icon": "fa-brands fa-facebook",
+          "href": "https://www.facebook.com/batalalarochelle",
+          "visible": true,
+          "style": {
+            "color": "#fff",
+            "font-size": "1.5rem"
+          }
+        },
+        {
+          "label": "Instagram",
+          "icon": "fa-brands fa-instagram",
+          "href": "https://www.instagram.com/batalalarochelle/",
+          "visible": true,
+          "style": {
+            "color": "#fff",
+            "font-size": "1.5rem"
+          }
+        },
+        {
+          "label": "YouTube",
+          "icon": "fa-brands fa-youtube",
+          "href": "https://www.youtube.com/channel/UC2nkR0cyMLRxYs1yk1ktHgQ",
+          "visible": true,
+          "style": {
+            "color": "#fff",
+            "font-size": "1.5rem"
+          }
+        }
+      ]
+    },
+    "copyright": {
+      "text": "© 2025 <a href=\"https://caixadev.dev\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: inherit; text-decoration: underline;\">caixaDev</a>. Tous droits réservés.",
+      "style": {
+        "font-size": "0.85rem",
+        "color": "#999",
+        "margin-top": "1rem"
+      }
+    }
+  },
+  "contact_form": {
+    "fields": [
+      {
+        "id": "name",
+        "label": "Nom :",
+        "type": "text",
+        "required": true,
+        "placeholder": ""
+      },
+      {
+        "id": "email",
+        "label": "Email :",
+        "type": "email",
+        "required": true,
+        "placeholder": ""
+      },
+      {
+        "id": "message",
+        "label": "Message :",
+        "type": "textarea",
+        "required": true,
+        "rows": 4,
+        "placeholder": ""
+      }
+    ],
+    "submit_label": "Envoyer",
+    "modal_title": "Contactez Batala La Rochelle"
+  }
+}

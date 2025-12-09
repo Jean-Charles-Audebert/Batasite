@@ -238,7 +238,7 @@ footer {
     grid-column: span 4;
     background: #bdbcbc;
     padding: 1.5rem;
-    border-radius: 8px;
+    border-radius: 1px;
     text-align: center;
 }
 
