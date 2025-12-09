@@ -5,8 +5,6 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { ToastNotification } from './components/ToastNotification';
 import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
-import { ContentPage } from './pages/ContentPage';
-import { AdminPage } from './pages/AdminPage';
 import { SetPasswordPage } from './pages/SetPasswordPage';
 import './App.css';
 
@@ -24,35 +22,18 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/set-password" element={<SetPasswordPage />} />
 
-            {/* Routes protégées */}
+            {/* Routes protégées - tout dans le dashboard */}
             <Route
-              path="/dashboard"
+              path="/*"
               element={
                 <ProtectedRoute>
                   <DashboardPage />
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/content"
-              element={
-                <ProtectedRoute>
-                  <ContentPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute>
-                  <AdminPage />
-                </ProtectedRoute>
-              }
-            />
 
             {/* Redirection par défaut */}
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
           <ToastNotification />
         </AuthProvider>

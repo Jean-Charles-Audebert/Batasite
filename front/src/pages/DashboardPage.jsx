@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import { ContentPage } from './ContentPage';
 import { AdminPage } from './AdminPage';
@@ -8,13 +8,17 @@ import styles from './DashboardPage.module.css';
 /**
  * US-2.2: Dashboard principal
  * - Navigation sidebar
- * - Section principale (swap entre Content/Admin)
+ * - Section principale avec routing
  * - Logout
  */
 export function DashboardPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const auth = React.useContext(AuthContext);
-  const [activeSection, setActiveSection] = React.useState('content');
+
+  // Déterminer la section active basée sur le path
+  const isAdminRoute = location.pathname.includes('/admin');
+  const activeSection = isAdminRoute ? 'admins' : 'content';
 
   const handleLogout = async () => {
     await auth.logout();
@@ -32,13 +36,13 @@ export function DashboardPage() {
         <nav className={styles.nav}>
           <button
             className={`${styles.navItem} ${activeSection === 'content' ? styles.active : ''}`}
-            onClick={() => setActiveSection('content')}
+            onClick={() => navigate('/dashboard')}
           >
             📄 Contenu
           </button>
           <button
             className={`${styles.navItem} ${activeSection === 'admins' ? styles.active : ''}`}
-            onClick={() => setActiveSection('admins')}
+            onClick={() => navigate('/admin')}
           >
             👥 Administrateurs
           </button>
@@ -60,27 +64,13 @@ export function DashboardPage() {
         </header>
 
         <div className={styles.content}>
-          {activeSection === 'content' ? (
-            <ContentSection />
-          ) : (
-            <AdminSection />
-          )}
+          <Routes>
+            <Route path="/" element={<ContentPage />} />
+            <Route path="/dashboard" element={<ContentPage />} />
+            <Route path="/admin/*" element={<AdminPage />} />
+          </Routes>
         </div>
       </main>
     </div>
   );
-}
-
-/**
- * Section contenu (US-2.2)
- */
-function ContentSection() {
-  return <ContentPage />;
-}
-
-/**
- * Section admins (US-2.3)
- */
-function AdminSection() {
-  return <AdminPage />;
 }
