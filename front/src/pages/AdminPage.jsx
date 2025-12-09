@@ -30,7 +30,8 @@ export function AdminPage() {
       setLoading(true);
       setError(null);
       const data = await api.listAdmins();
-      setAdmins(data.admins || []);
+      // API returns array directly, not { admins: [...] }
+      setAdmins(Array.isArray(data) ? data : (data.admins || []));
     } catch (err) {
       setError(err.message || 'Erreur lors du chargement des administrateurs');
     } finally {
