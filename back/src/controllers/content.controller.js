@@ -6,6 +6,7 @@
 const contentModel = require('../models/content.model');
 const { validate, contentUpdateSchema } = require('../utils/validators');
 const log = require('../utils/logger');
+const { sendValidationError } = require('../utils/validation.helpers');
 
 /**
  * Récupère le contenu global
@@ -33,9 +34,8 @@ const updateContent = async (req, res, next) => {
     // Validation
     const { error } = validate(contentUpdateSchema, { data });
     if (error) {
-      const err = new Error(error.details.map(d => d.message).join(', '));
-      err.status = 400;
-      return next(err);
+      const errorMessage = error.details.map(d => d.message).join(', ');
+      return sendValidationError(res, errorMessage);
     }
 
     // Update
@@ -60,9 +60,8 @@ const patchContent = async (req, res, next) => {
     // Validation
     const { error } = validate(contentUpdateSchema, { data: partialData });
     if (error) {
-      const err = new Error(error.details.map(d => d.message).join(', '));
-      err.status = 400;
-      return next(err);
+      const errorMessage = error.details.map(d => d.message).join(', ');
+      return sendValidationError(res, errorMessage);
     }
 
     // Patch (merge)

@@ -139,7 +139,7 @@ describe('Admin Management API - Write Operations', () => {
         .set('Authorization', `Bearer ${authToken}`);
 
       expect(response.status).toBe(403);
-      expect(response.body.error).toContain('cannot');
+      expect(response.body.error).toContain('Cannot');
     });
 
     test('should return 404 for non-existent admin', async () => {

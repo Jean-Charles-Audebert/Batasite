@@ -1,5 +1,6 @@
 const { pool } = require('../config/db');
 const logger = require('../utils/logger');
+const { validateNumericId, sendValidationError, sendNotFound } = require('../utils/validation.helpers');
 
 /**
  * GET /admin - List all admins (with optional role filter)
@@ -32,22 +33,22 @@ exports.getAllAdmins = async (req, res, next) => {
 exports.getAdminById = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const { valid, id: validatedId } = validateNumericId(id);
 
-    // Validate ID is a number
-    if (isNaN(id)) {
-      return res.status(400).json({ error: 'Invalid admin ID format' });
+    if (!valid) {
+      return sendValidationError(res, 'Invalid admin ID format');
     }
 
     const result = await pool.query(
       'SELECT id, email, role, is_active, created_at FROM admins WHERE id = $1',
-      [id]
+      [validatedId]
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Admin not found' });
+      return sendNotFound(res, 'Admin not found');
     }
 
-    logger.info(`Admin ${id} retrieved by: ${req.user.email}`);
+    logger.info(`Admin ${validatedId} retrieved by: ${req.user.email}`);
     res.json(result.rows[0]);
   } catch (error) {
     logger.error(`Error fetching admin: ${error.message}`);
@@ -61,27 +62,27 @@ exports.getAdminById = async (req, res, next) => {
 exports.getAdminActivity = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const { valid, id: validatedId } = validateNumericId(id);
 
-    // Validate ID is a number
-    if (isNaN(id)) {
-      return res.status(400).json({ error: 'Invalid admin ID format' });
+    if (!valid) {
+      return sendValidationError(res, 'Invalid admin ID format');
     }
 
     // First check if admin exists
     const adminCheck = await pool.query(
       'SELECT id FROM admins WHERE id = $1',
-      [id]
+      [validatedId]
     );
 
     if (adminCheck.rows.length === 0) {
-      return res.status(404).json({ error: 'Admin not found' });
+      return sendNotFound(res, 'Admin not found');
     }
 
     // Get activity log from content history or audit table if available
     // For now, return empty array as placeholder
     const activity = [];
 
-    logger.info(`Admin ${id} activity retrieved by: ${req.user.email}`);
+    logger.info(`Admin ${validatedId} activity retrieved by: ${req.user.email}`);
     res.json(activity);
   } catch (error) {
     logger.error(`Error fetching admin activity: ${error.message}`);
@@ -90,58 +91,61 @@ exports.getAdminActivity = async (req, res, next) => {
 };
 
 /**
- * PATCH /admin/:id - Update admin
+ * PATCH /admin/:id - Update admin role or is_active
  */
 exports.updateAdmin = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { is_active, role } = req.body;
+    const { role, is_active } = req.body;
 
     // Validate ID is a number
-    if (isNaN(id)) {
-      return res.status(400).json({ error: 'Invalid admin ID format' });
+    const { valid, id: validatedId } = validateNumericId(id);
+    if (!valid) {
+      return sendValidationError(res, 'Invalid admin ID format');
     }
 
-    // Prevent updating email or password
-    if (req.body.email || req.body.password) {
-      return res.status(400).json({ error: 'Cannot update email or password via this endpoint' });
+    // Prevent updating email or password_hash
+    if (req.body.email || req.body.password_hash) {
+      return sendValidationError(res, 'Cannot update email or password via PATCH');
+    }
+
+    // Validate at least one field is being updated
+    if (!role && is_active === undefined) {
+      return sendValidationError(res, 'Provide role or is_active to update');
     }
 
     // Check if admin exists
-    const checkRes = await pool.query(
-      'SELECT id FROM admins WHERE id = $1',
-      [id]
-    );
-
-    if (checkRes.rows.length === 0) {
-      return res.status(404).json({ error: 'Admin not found' });
+    const adminCheck = await pool.query('SELECT id FROM admins WHERE id = $1', [validatedId]);
+    if (adminCheck.rows.length === 0) {
+      return sendNotFound(res, 'Admin not found');
     }
 
-    // Build update query dynamically
+    // Build dynamic update query
     const updates = [];
-    const values = [id];
-    let paramCount = 2;
+    const values = [];
+    let paramIndex = 1;
+
+    if (role) {
+      updates.push(`role = $${paramIndex}`);
+      values.push(role);
+      paramIndex++;
+    }
 
     if (is_active !== undefined) {
-      updates.push(`is_active = $${paramCount}`);
+      updates.push(`is_active = $${paramIndex}`);
       values.push(is_active);
-      paramCount++;
+      paramIndex++;
     }
 
-    if (role !== undefined) {
-      updates.push(`role = $${paramCount}`);
-      values.push(role);
-      paramCount++;
-    }
+    // Set updated_at
+    updates.push(`updated_at = NOW()`);
 
-    if (updates.length === 0) {
-      return res.status(400).json({ error: 'No valid fields to update' });
-    }
+    values.push(validatedId); // For WHERE clause
 
-    const query = `UPDATE admins SET ${updates.join(', ')} WHERE id = $1 RETURNING id, email, role, is_active, created_at`;
+    const query = `UPDATE admins SET ${updates.join(', ')} WHERE id = $${paramIndex} RETURNING id, email, role, is_active, updated_at`;
     const result = await pool.query(query, values);
 
-    logger.info(`Admin ${id} updated by: ${req.user.email}`);
+    logger.info(`Admin ${validatedId} updated by: ${req.user.email} (role: ${role}, is_active: ${is_active})`);
     res.json(result.rows[0]);
   } catch (error) {
     logger.error(`Error updating admin: ${error.message}`);
@@ -157,32 +161,28 @@ exports.deleteAdmin = async (req, res, next) => {
     const { id } = req.params;
 
     // Validate ID is a number
-    if (isNaN(id)) {
-      return res.status(400).json({ error: 'Invalid admin ID format' });
+    const { valid, id: validatedId } = validateNumericId(id);
+    if (!valid) {
+      return sendValidationError(res, 'Invalid admin ID format');
     }
 
     // Prevent self-deletion
-    if (parseInt(id) === req.user.id) {
-      return res.status(403).json({ error: 'You cannot delete your own account' });
+    if (validatedId === req.user.id) {
+      return res.status(403).json({ error: 'Cannot delete yourself' });
     }
 
     // Check if admin exists
-    const checkRes = await pool.query(
-      'SELECT id FROM admins WHERE id = $1',
-      [id]
-    );
-
-    if (checkRes.rows.length === 0) {
-      return res.status(404).json({ error: 'Admin not found' });
+    const adminCheck = await pool.query('SELECT email FROM admins WHERE id = $1', [validatedId]);
+    if (adminCheck.rows.length === 0) {
+      return sendNotFound(res, 'Admin not found');
     }
 
-    // Delete the admin
-    await pool.query('DELETE FROM admins WHERE id = $1', [id]);
+    const deletedEmail = adminCheck.rows[0].email;
 
-    // Clean up related data (content updates by this admin)
-    await pool.query('UPDATE content SET updated_by = NULL WHERE updated_by = $1', [id]);
+    // Delete admin
+    await pool.query('DELETE FROM admins WHERE id = $1', [validatedId]);
 
-    logger.info(`Admin ${id} deleted by: ${req.user.email}`);
+    logger.info(`Admin ${validatedId} (${deletedEmail}) deleted by: ${req.user.email}`);
     res.json({ message: 'Admin deleted successfully' });
   } catch (error) {
     logger.error(`Error deleting admin: ${error.message}`);
