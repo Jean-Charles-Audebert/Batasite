@@ -1,5 +1,6 @@
 const express = require('express');
 const { initDb, testConnection } = require('./config/db');
+const logger = require('./utils/logger');
 require('dotenv').config();
 
 const app = express();
@@ -37,7 +38,7 @@ app.use((req, res) => {
 
 // Error handler
 app.use((err, req, res, next) => {
-  console.error('Error:', err);
+  logger.error('Request error:', err.message || err);
   res.status(err.status || 500).json({
     error: err.message || 'Internal Server Error',
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),

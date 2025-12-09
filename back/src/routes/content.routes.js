@@ -1,5 +1,5 @@
 /**
- * Routes pour la gestion du contenu
+ * Routes pour la gestion du contenu global
  * POST /content - GET /content
  * PUT /content - PATCH /content
  * GET /content/history
@@ -17,27 +17,33 @@ const router = express.Router();
 router.use(authMiddleware);
 
 /**
- * GET /content
- * Récupère le contenu global
+ * Retrieve global site content
+ * @route GET /content
+ * @returns {Object} JSONB content object
  */
 router.get('/', contentController.getContent);
 
 /**
- * PUT /content
- * Met à jour le contenu complètement (remplacement)
+ * Replace entire content (full update)
+ * @route PUT /content
+ * @body {Object} data - Complete content object (JSONB)
+ * @returns {Object} Updated content with metadata
  */
 router.put('/', contentController.updateContent);
 
 /**
- * PATCH /content
- * Met à jour le contenu partiellement (merge)
+ * Partially update content (merge operation)
+ * @route PATCH /content
+ * @body {Object} data - Partial content to merge
+ * @returns {Object} Updated content with metadata
  */
 router.patch('/', contentController.patchContent);
 
 /**
- * GET /content/history
- * Récupère l'historique des versions
- * Query params: ?limit=20
+ * Retrieve content version history with pagination
+ * @route GET /content/history
+ * @query {number} [limit=20] - Number of versions to return (max 100)
+ * @returns {Array<Object>} Content versions ordered by updated_at DESC
  */
 router.get('/history', contentController.getContentHistory);
 
