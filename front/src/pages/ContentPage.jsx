@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { JsonEditor } from '../components/JsonEditor';
 import { useNotification } from '../contexts/NotificationContext';
 import styles from './ContentPage.module.css';
 
@@ -54,10 +55,16 @@ export function ContentPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
+    // Si c'est un changement depuis JsonEditor
+    if (name === '__json__') {
+      setFormData(value);
+    } else {
+      // Sinon c'est un champ texte
+      setFormData(prev => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
   const handleSave = async () => {
     try {
@@ -189,14 +196,7 @@ function ContentView({ data }) {
         {Object.keys(safeData).length === 0 ? (
           <p className={styles.empty}>Aucun contenu pour le moment</p>
         ) : (
-          <dl>
-            {Object.entries(safeData).map(([key, value]) => (
-              <div key={key} className={styles.item}>
-                <dt>{key}</dt>
-                <dd>{typeof value === 'string' ? value : JSON.stringify(value)}</dd>
-              </div>
-            ))}
-          </dl>
+          <JsonEditor data={safeData} onChange={() => {}} disabled={true} />
         )}
       </div>
     </div>
@@ -209,36 +209,7 @@ function ContentView({ data }) {
 function ContentEditor({ data, onChange, loading }) {
   return (
     <div className={styles.editor}>
-      <form>
-        {Object.entries(data).map(([key, value]) => (
-          <div key={key} className={styles.formGroup}>
-            <label htmlFor={key}>{key}</label>
-            <textarea
-              id={key}
-              name={key}
-              value={typeof value === 'string' ? value : JSON.stringify(value)}
-              onChange={onChange}
-              disabled={loading}
-              rows={4}
-            />
-          </div>
-        ))}
-
-        <div className={styles.formGroup}>
-          <label htmlFor="newKey">Ajouter un champ</label>
-          <input
-            type="text"
-            id="newKey"
-            placeholder="Clé"
-            disabled={loading}
-          />
-          <textarea
-            placeholder="Valeur"
-            disabled={loading}
-            rows={3}
-          />
-        </div>
-      </form>
+      <JsonEditor data={data} onChange={onChange} disabled={loading} />
     </div>
   );
 }

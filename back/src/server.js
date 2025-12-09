@@ -1,6 +1,6 @@
 const express = require('express');
 require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') }); // Load environment variables FIRST from root .env
-const { initDb, seedAdmins, testConnection } = require('./config/db');
+const { initDb, seedAdmins, seedContent, testConnection } = require('./config/db');
 const logger = require('./utils/logger');
 
 const app = express();
@@ -61,6 +61,9 @@ const startServer = async () => {
 
     // Seed des admins par défaut
     await seedAdmins();
+
+    // Seed du contenu par défaut
+    await seedContent();
 
     // Démarre le serveur
     app.listen(PORT, () => {

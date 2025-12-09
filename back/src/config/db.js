@@ -166,6 +166,63 @@ const seedAdmins = async () => {
 };
 
 /**
+ * Seed du contenu par défaut (si table vide)
+ */
+const seedContent = async () => {
+  try {
+    const res = await query('SELECT COUNT(*) FROM content');
+    if (res.rows[0].count > 0) {
+      console.log(`✓ Content already seeded (${res.rows[0].count} found)`);
+      return;
+    }
+
+    console.log('Seeding default content...');
+
+    // Contenu initial pour la page d'accueil
+    const initialContent = {
+      hero: {
+        title: 'Bienvenue à Batala La Rochelle',
+        subtitle: 'Découvrez notre association',
+        description: 'Association de danse et de musique du monde'
+      },
+      sections: [
+        {
+          id: 'about',
+          title: 'À propos de nous',
+          content: 'Batala La Rochelle est une association dynamique dédiée à la promotion de la danse et la musique du Brésil.'
+        },
+        {
+          id: 'activities',
+          title: 'Nos activités',
+          content: 'Cours de samba, batucada, spectacles et événements culturels toute l\'année.'
+        },
+        {
+          id: 'contact',
+          title: 'Nous contacter',
+          content: 'Rejoignez notre communauté vibrante!'
+        }
+      ]
+    };
+
+    // Insérer le contenu initial
+    await query(
+      `INSERT INTO content (content, updated_by) 
+       VALUES ($1, (SELECT id FROM admins WHERE role = 'superadmin' LIMIT 1))`,
+      [JSON.stringify(initialContent)]
+    );
+
+    console.log('✓ Default content seeded successfully');
+  } catch (error) {
+    if (error.code === '23505') {
+      console.log('✓ Content already exists, skipping seed');
+      return;
+    }
+    console.error('Error seeding content:', error);
+    throw error;
+  }
+};
+
+/**
  * Teste la connexion à la base de données
  */
 const testConnection = async () => {
@@ -196,6 +253,7 @@ module.exports = {
   pool,
   initDb,
   seedAdmins,
+  seedContent,
   testConnection,
   closePool,
 };
