@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import styles from './LoginPage.module.css';
 
@@ -7,7 +7,6 @@ import styles from './LoginPage.module.css';
  * US-2.1: Page de connexion
  * - Formulaire email/password
  * - Gestion d'erreurs
- * - Lien vers register
  */
 export function LoginPage() {
   const navigate = useNavigate();
@@ -76,10 +75,6 @@ export function LoginPage() {
             {loading ? 'Connexion...' : 'Se connecter'}
           </button>
         </form>
-
-        <p className={styles.link}>
-          Pas encore de compte ? <Link to="/register">S'inscrire</Link>
-        </p>
       </div>
     </div>
   );

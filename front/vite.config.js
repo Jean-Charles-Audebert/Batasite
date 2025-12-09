@@ -5,11 +5,15 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    middlewareMode: false,
+  },
   build: {
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
         admin: path.resolve(__dirname, 'admin.html'),
+        'set-password': path.resolve(__dirname, 'set-password.html'),
       },
     },
   },

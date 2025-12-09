@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
+import { useNotification } from '../contexts/NotificationContext';
 import styles from './AdminPage.module.css';
 
 /**
@@ -9,6 +11,8 @@ import styles from './AdminPage.module.css';
  * - Gestion des rôles (admin ↔ superadmin)
  */
 export function AdminPage() {
+  const { user: currentUser } = useAuth();
+  const { success, error: notifyError } = useNotification();
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,7 +21,8 @@ export function AdminPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    role: 'admin'
+    role: 'admin',
+    is_active: true
   });
 
   // Charger la liste des admins
@@ -40,16 +45,15 @@ export function AdminPage() {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
-
   const handleCreate = async () => {
-    if (!formData.email || !formData.password) {
-      setError('Email et mot de passe sont requis');
+    if (!formData.email) {
+      setError('Email est requis');
       return;
     }
 
@@ -59,9 +63,12 @@ export function AdminPage() {
       await api.createAdmin(formData);
       setFormData({ email: '', password: '', role: 'admin' });
       setShowForm(false);
+      success('Administrateur créé avec succès');
       await loadAdmins();
     } catch (err) {
-      setError(err.message || 'Erreur lors de la création de l\'administrateur');
+      const msg = err.message || 'Erreur lors de la création de l\'administrateur';
+      setError(msg);
+      notifyError(msg);
     } finally {
       setLoading(false);
     }
@@ -76,19 +83,24 @@ export function AdminPage() {
     try {
       setLoading(true);
       setError(null);
-      const updateData = {
-        role: formData.role
-      };
+      const updateData = {};
       if (formData.password) {
         updateData.password = formData.password;
       }
+      // Allow updating is_active for other admins
+      if (editingId !== currentUser?.id) {
+        updateData.is_active = formData.is_active;
+      }
       await api.updateAdmin(editingId, updateData);
-      setFormData({ email: '', password: '', role: 'admin' });
+      setFormData({ email: '', password: '', role: 'admin', is_active: true });
       setEditingId(null);
       setShowForm(false);
+      success('Administrateur mis à jour avec succès');
       await loadAdmins();
     } catch (err) {
-      setError(err.message || 'Erreur lors de la mise à jour');
+      const msg = err.message || 'Erreur lors de la mise à jour';
+      setError(msg);
+      notifyError(msg);
     } finally {
       setLoading(false);
     }
@@ -103,9 +115,12 @@ export function AdminPage() {
       setLoading(true);
       setError(null);
       await api.deleteAdmin(id);
+      success('Administrateur supprimé avec succès');
       await loadAdmins();
     } catch (err) {
-      setError(err.message || 'Erreur lors de la suppression');
+      const msg = err.message || 'Erreur lors de la suppression';
+      setError(msg);
+      notifyError(msg);
     } finally {
       setLoading(false);
     }
@@ -116,13 +131,14 @@ export function AdminPage() {
     setFormData({
       email: admin.email,
       password: '',
-      role: admin.role
+      role: admin.role,
+      is_active: admin.is_active
     });
     setShowForm(true);
   };
 
   const handleCancel = () => {
-    setFormData({ email: '', password: '', role: 'admin' });
+    setFormData({ email: '', password: '', role: 'admin', is_active: true });
     setEditingId(null);
     setShowForm(false);
   };
@@ -143,7 +159,7 @@ export function AdminPage() {
           <button
             onClick={() => {
               setEditingId(null);
-              setFormData({ email: '', password: '', role: 'admin' });
+              setFormData({ email: '', password: '', role: 'admin', is_active: true });
               setShowForm(true);
             }}
             disabled={loading}
@@ -164,6 +180,8 @@ export function AdminPage() {
           onCancel={handleCancel}
           loading={loading}
           isEditing={!!editingId}
+          editingId={editingId}
+          currentUser={currentUser}
         />
       ) : (
         <AdminList
@@ -180,7 +198,7 @@ export function AdminPage() {
 /**
  * Formulaire CRUD pour administrateurs
  */
-function AdminForm({ data, onChange, onSave, onCancel, loading, isEditing }) {
+function AdminForm({ data, onChange, onSave, onCancel, loading, isEditing, editingId, currentUser }) {
   return (
     <div className={styles.formContainer}>
       <h3>{isEditing ? 'Modifier l\'administrateur' : 'Créer un administrateur'}</h3>
@@ -199,36 +217,44 @@ function AdminForm({ data, onChange, onSave, onCancel, loading, isEditing }) {
             required
           />
         </div>
+        {isEditing && editingId === currentUser?.id && (
+          <div className={styles.formGroup}>
+            <label htmlFor="password">
+              Mot de passe (laisser vide pour ne pas changer)
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={data.password}
+              onChange={onChange}
+              disabled={loading}
+              placeholder="••••••••"
+            />
+          </div>
+        )}
 
-        <div className={styles.formGroup}>
-          <label htmlFor="password">
-            Mot de passe {isEditing && '(laisser vide pour ne pas changer)'}
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={data.password}
-            onChange={onChange}
-            disabled={loading}
-            placeholder="••••••••"
-            required={!isEditing}
-          />
-        </div>
+        {isEditing && editingId !== currentUser?.id && (
+          <div className={styles.formGroup}>
+            <label htmlFor="is_active">
+              <input
+                type="checkbox"
+                id="is_active"
+                name="is_active"
+                checked={data.is_active}
+                onChange={onChange}
+                disabled={loading}
+              />
+              {' '}Compte actif
+            </label>
+          </div>
+        )}
 
-        <div className={styles.formGroup}>
-          <label htmlFor="role">Rôle</label>
-          <select
-            id="role"
-            name="role"
-            value={data.role}
-            onChange={onChange}
-            disabled={loading}
-          >
-            <option value="admin">Administrateur</option>
-            <option value="superadmin">Superadministrateur</option>
-          </select>
-        </div>
+        {!isEditing && (
+          <div className={styles.infoBox}>
+            <p>Un email d'invitation sera envoyé avec un lien pour créer le mot de passe.</p>
+          </div>
+        )}
 
         <div className={styles.formActions}>
           <button

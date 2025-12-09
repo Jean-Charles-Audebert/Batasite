@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { useNotification } from '../contexts/NotificationContext';
 import styles from './ContentPage.module.css';
 
 /**
@@ -9,6 +10,7 @@ import styles from './ContentPage.module.css';
  * - Historique des versions
  */
 export function ContentPage() {
+  const { success, error: notifyError } = useNotification();
   const [content, setContent] = useState(null);
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({});
@@ -57,7 +59,6 @@ export function ContentPage() {
       [name]: value,
     }));
   };
-
   const handleSave = async () => {
     try {
       setLoading(true);
@@ -65,10 +66,13 @@ export function ContentPage() {
       await api.updateContent(formData);
       setContent(formData);
       setEditing(false);
+      success('Contenu sauvegardé avec succès');
       // Recharger pour avoir le timestamp du serveur
       await loadContent();
     } catch (err) {
-      setError(err.message || 'Erreur lors de la sauvegarde');
+      const msg = err.message || 'Erreur lors de la sauvegarde';
+      setError(msg);
+      notifyError(msg);
     } finally {
       setLoading(false);
     }
@@ -91,9 +95,12 @@ export function ContentPage() {
       setContent(version.content);
       setFormData(version.content);
       setShowHistory(false);
+      success('Version restaurée avec succès');
       await loadContent();
     } catch (err) {
-      setError(err.message || 'Erreur lors de la restauration');
+      const msg = err.message || 'Erreur lors de la restauration';
+      setError(msg);
+      notifyError(msg);
     } finally {
       setLoading(false);
     }

@@ -104,15 +104,6 @@ class ApiService {
   }
 
   /**
-   * Authentification - Register
-   */
-  async register(email, password) {
-    const response = await this.post('/auth/register', { email, password });
-    this.setTokens(response.accessToken, response.refreshToken);
-    return response;
-  }
-
-  /**
    * Authentification - Login
    */
   async login(email, password) {

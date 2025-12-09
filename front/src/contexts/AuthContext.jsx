@@ -4,7 +4,7 @@ import api from '../services/api';
 /**
  * Context pour la gestion globale de l'authentification
  * État: utilisateur + loading
- * Actions: login, logout, register, check
+ * Actions: login, logout, check
  */
 export const AuthContext = createContext(null);
 
@@ -15,31 +15,31 @@ export function AuthProvider({ children }) {
 
   // Vérifier l'authentification au montage
   useEffect(() => {
-    if (api.isAuthenticated()) {
-      // Charger les infos utilisateur depuis le token JWT
-      // Note: Dans une app réelle, on ferait un /me endpoint
-      // Pour l'instant, on considère qu'on est authentifié
-      setUser({ authenticated: true });
-    }
-    setLoading(false);
+    const checkAuth = async () => {
+      if (api.isAuthenticated()) {
+        try {
+          // Charger les infos utilisateur depuis le endpoint /me
+          const response = await api.get('/auth/me');
+          setUser(response.data || response);
+        } catch (err) {
+          console.error('Failed to load user data:', err);
+          // Si erreur, garder juste l'état authentifié
+          setUser({ authenticated: true });
+        }
+      }
+      setLoading(false);
+    };
+    
+    checkAuth();
   }, []);
 
   const login = async (email, password) => {
     try {
       setError(null);
-      await api.login(email, password);
-      setUser({ authenticated: true, email });
-    } catch (err) {
-      setError(err.message);
-      throw err;
-    }
-  };
-
-  const register = async (email, password) => {
-    try {
-      setError(null);
-      await api.register(email, password);
-      setUser({ authenticated: true, email });
+      const loginResponse = await api.login(email, password);
+      // Après login réussi, charger les données utilisateur complètes
+      const userResponse = await api.get('/auth/me');
+      setUser(userResponse.data || userResponse);
     } catch (err) {
       setError(err.message);
       throw err;
@@ -62,7 +62,6 @@ export function AuthProvider({ children }) {
     loading,
     error,
     login,
-    register,
     logout,
     isAuthenticated: !!user,
   };
