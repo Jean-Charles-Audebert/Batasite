@@ -9,6 +9,7 @@ import './App.css';
 /**
  * Composant racine de l'application
  * Configure les routes et les providers
+ * Admin dashboard accessible via /admin.html en dev
  */
 function App() {
   return (
