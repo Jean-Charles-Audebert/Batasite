@@ -231,6 +231,13 @@ class ApiService {
   }
 
   /**
+   * Créer un nouvel admin
+   */
+  createAdmin(data) {
+    return this.post('/admin', data);
+  }
+
+  /**
    * Récupérer un admin
    */
   getAdmin(id) {

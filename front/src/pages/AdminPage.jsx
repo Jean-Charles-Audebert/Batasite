@@ -29,7 +29,7 @@ export function AdminPage() {
     try {
       setLoading(true);
       setError(null);
-      const data = await api.getAdmins();
+      const data = await api.listAdmins();
       setAdmins(data.admins || []);
     } catch (err) {
       setError(err.message || 'Erreur lors du chargement des administrateurs');

@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { AdminPage } from '../pages/AdminPage';
 
 jest.mock('../services/api', () => ({
-  getAdmins: jest.fn(),
+  listAdmins: jest.fn(),
   createAdmin: jest.fn(),
   updateAdmin: jest.fn(),
   deleteAdmin: jest.fn(),
@@ -20,13 +20,13 @@ describe('AdminPage Component', () => {
   });
 
   test('affiche "Chargement..." au démarrage', () => {
-    api.getAdmins.mockImplementationOnce(() => new Promise(() => {}));
+    api.listAdmins.mockImplementationOnce(() => new Promise(() => {}));
     render(<AdminPage />);
     expect(screen.getByText('Chargement...')).toBeInTheDocument();
   });
 
   test('affiche la liste des administrateurs', async () => {
-    api.getAdmins.mockResolvedValueOnce({
+    api.listAdmins.mockResolvedValueOnce({
       admins: [
         {
           id: 1,
@@ -53,7 +53,7 @@ describe('AdminPage Component', () => {
   });
 
   test('affiche "Aucun administrateur" si liste vide', async () => {
-    api.getAdmins.mockResolvedValueOnce({ admins: [] });
+    api.listAdmins.mockResolvedValueOnce({ admins: [] });
 
     render(<AdminPage />);
 
@@ -63,7 +63,7 @@ describe('AdminPage Component', () => {
   });
 
   test('permet d\'ouvrir le formulaire de création', async () => {
-    api.getAdmins.mockResolvedValueOnce({ admins: [] });
+    api.listAdmins.mockResolvedValueOnce({ admins: [] });
 
     render(<AdminPage />);
 
@@ -79,7 +79,7 @@ describe('AdminPage Component', () => {
   });
 
   test('permet d\'annuler la création', async () => {
-    api.getAdmins.mockResolvedValueOnce({ admins: [] });
+    api.listAdmins.mockResolvedValueOnce({ admins: [] });
 
     render(<AdminPage />);
 
@@ -101,7 +101,7 @@ describe('AdminPage Component', () => {
   });
 
   test('permet d\'éditer un administrateur', async () => {
-    api.getAdmins.mockResolvedValueOnce({
+    api.listAdmins.mockResolvedValueOnce({
       admins: [
         {
           id: 1,
@@ -128,7 +128,7 @@ describe('AdminPage Component', () => {
   });
 
   test('supprime un administrateur avec confirmation', async () => {
-    api.getAdmins.mockResolvedValueOnce({
+    api.listAdmins.mockResolvedValueOnce({
       admins: [
         {
           id: 1,
@@ -140,7 +140,7 @@ describe('AdminPage Component', () => {
     });
 
     api.deleteAdmin.mockResolvedValueOnce({ success: true });
-    api.getAdmins.mockResolvedValueOnce({ admins: [] });
+    api.listAdmins.mockResolvedValueOnce({ admins: [] });
 
     render(<AdminPage />);
 
