@@ -5,45 +5,46 @@ const jwt = require('jsonwebtoken');
 
 describe('Admin Management API', () => {
   let authToken;
-  let adminId;
   let testAdminId;
+  let superadminId; // ID of the seed superadmin (immuable)
 
   beforeAll(async () => {
-    // Register superadmin
-    const adminRegRes = await request(app)
-      .post('/auth/register')
-      .send({
-        email: `admin-${Date.now()}@example.com`,
-        password: 'TestPassword123!',
-        role: 'superadmin',
-      });
-
-    adminId = adminRegRes.body.data.id;
-
-    // Login to get token
-    const loginRes = await request(app)
-      .post('/auth/login')
-      .send({
-        email: adminRegRes.body.data.email,
-        password: 'TestPassword123!',
-      });
-
-    authToken = loginRes.body.accessToken;
-
-    // Create test regular admin
+    // Create test regular admin for CRUD operations
     const testAdminRegRes = await request(app)
       .post('/auth/register')
       .send({
         email: `test-admin-${Date.now()}@example.com`,
         password: 'TestPassword123!',
-        role: 'admin',
       });
 
     testAdminId = testAdminRegRes.body.data.id;
+
+    // Login as test admin to get token
+    const loginRes = await request(app)
+      .post('/auth/login')
+      .send({
+        email: testAdminRegRes.body.data.email,
+        password: 'TestPassword123!',
+      });
+
+    authToken = loginRes.body.accessToken;
+
+    // Get the seed superadmin ID (first superadmin in DB)
+    const superadminQuery = await pool.query(
+      'SELECT id FROM admins WHERE role = \'superadmin\' ORDER BY id ASC LIMIT 1'
+    );
+    superadminId = superadminQuery.rows[0]?.id;
   });
 
   afterAll(async () => {
-    // Let auth.controller.test handle pool cleanup
+    // Clean up test admins created during tests (not the seed superadmin)
+    try {
+      if (testAdminId) {
+        await pool.query('DELETE FROM admins WHERE id = $1', [testAdminId]);
+      }
+    } catch (err) {
+      console.error('Cleanup error:', err);
+    }
   });
 
   describe('GET /admin - List all admins', () => {
@@ -69,6 +70,23 @@ describe('Admin Management API', () => {
       expect(admin).toHaveProperty('role');
       expect(admin).toHaveProperty('is_active');
       expect(admin).not.toHaveProperty('password_hash');
+    });
+
+    test('should exclude superadmins from list', async () => {
+      const response = await request(app)
+        .get('/admin')
+        .set('Authorization', `Bearer ${authToken}`);
+
+      expect(response.status).toBe(200);
+      // Check that all returned admins have role 'admin', not 'superadmin'
+      response.body.forEach(admin => {
+        expect(admin.role).toBe('admin');
+      });
+      // Ensure superadmin is NOT in the list
+      if (superadminId) {
+        const superadminInList = response.body.some(admin => admin.id === superadminId);
+        expect(superadminInList).toBe(false);
+      }
     });
 
     test('should return 401 without JWT', async () => {
@@ -154,7 +172,7 @@ describe('Admin Management API', () => {
         .set('Authorization', `Bearer ${authToken}`);
 
       const response = await request(app)
-        .get(`/admin/${adminId}/activity`)
+        .get(`/admin/${testAdminId}/activity`)
         .set('Authorization', `Bearer ${authToken}`);
 
       expect(response.status).toBe(200);
@@ -162,7 +180,7 @@ describe('Admin Management API', () => {
     });
 
     test('should return 401 without JWT', async () => {
-      const response = await request(app).get(`/admin/${adminId}/activity`);
+      const response = await request(app).get(`/admin/${testAdminId}/activity`);
 
       expect(response.status).toBe(401);
     });
@@ -220,7 +238,7 @@ describe('Admin Management API', () => {
       expect(response.status).toBe(400);
     });
 
-    test('should return 400 if missing password', async () => {
+    test('should accept admin creation without password (invitation flow)', async () => {
       const response = await request(app)
         .post('/admin')
         .set('Authorization', `Bearer ${authToken}`)
@@ -229,7 +247,10 @@ describe('Admin Management API', () => {
           role: 'admin',
         });
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveProperty('id');
+      expect(response.body.email).toBeDefined();
+      expect(response.body.role).toBe('admin');
     });
 
     test('should return 401 without JWT', async () => {
@@ -246,21 +267,45 @@ describe('Admin Management API', () => {
   });
 
   describe('PATCH /admin/:id - Update admin', () => {
+    let anotherAdminId;
+
+    beforeAll(async () => {
+      // Create another admin for modification testing
+      const anotherAdminRegRes = await request(app)
+        .post('/auth/register')
+        .send({
+          email: `another-admin-${Date.now()}@example.com`,
+          password: 'TestPassword123!',
+        });
+      anotherAdminId = anotherAdminRegRes.body.data.id;
+    });
+
+    afterAll(async () => {
+      // Clean up
+      if (anotherAdminId) {
+        try {
+          await pool.query('DELETE FROM admins WHERE id = $1', [anotherAdminId]);
+        } catch (err) {
+          console.error('Cleanup error in PATCH tests:', err);
+        }
+      }
+    });
+
     test('should update admin role (200)', async () => {
       const response = await request(app)
-        .patch(`/admin/${testAdminId}`)
+        .patch(`/admin/${anotherAdminId}`)
         .set('Authorization', `Bearer ${authToken}`)
         .send({
-          role: 'superadmin',
+          role: 'admin',
         });
 
       expect(response.status).toBe(200);
-      expect(response.body.role).toBe('superadmin');
+      expect(response.body.role).toBe('admin');
     });
 
     test('should update admin password', async () => {
       const response = await request(app)
-        .patch(`/admin/${testAdminId}`)
+        .patch(`/admin/${anotherAdminId}`)
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           password: 'NewPassword456!',

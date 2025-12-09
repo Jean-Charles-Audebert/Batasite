@@ -4,26 +4,36 @@ const { pool } = require('../config/db');
 
 describe('Admin Management API - Write Operations', () => {
   let authToken;
-  let adminId;
+  let superadminId;
+  let testAdminId;
   let targetAdminId;
 
   beforeAll(async () => {
-    // Register superadmin
-    const adminRegRes = await request(app)
+    // Fetch the seed superadmin for authentication
+    const superadminQuery = await pool.query(
+      'SELECT id FROM admins WHERE role = \'superadmin\' ORDER BY id ASC LIMIT 1'
+    );
+    superadminId = superadminQuery.rows[0]?.id;
+
+    // For write operations tests, we'll use the seed superadmin for auth
+    // Since we can't create superadmins via register anymore, we need to manually authenticate
+    // or use the first created admin as the auth user
+    
+    // Create test admin to use for API calls (will be treated as admin auth user)
+    const testAdminRegRes = await request(app)
       .post('/auth/register')
       .send({
         email: `admin-write-${Date.now()}@example.com`,
         password: 'TestPassword123!',
-        role: 'superadmin',
       });
 
-    adminId = adminRegRes.body.data.id;
+    testAdminId = testAdminRegRes.body.data.id;
 
     // Login to get token
     const loginRes = await request(app)
       .post('/auth/login')
       .send({
-        email: adminRegRes.body.data.email,
+        email: testAdminRegRes.body.data.email,
         password: 'TestPassword123!',
       });
 
@@ -35,14 +45,23 @@ describe('Admin Management API - Write Operations', () => {
       .send({
         email: `target-admin-${Date.now()}@example.com`,
         password: 'TestPassword123!',
-        role: 'admin',
       });
 
     targetAdminId = targetAdminRegRes.body.data.id;
   });
 
   afterAll(async () => {
-    await pool.end();
+    // Clean up test admins created during tests
+    try {
+      if (testAdminId) {
+        await pool.query('DELETE FROM admins WHERE id = $1', [testAdminId]);
+      }
+      if (targetAdminId) {
+        await pool.query('DELETE FROM admins WHERE id = $1', [targetAdminId]);
+      }
+    } catch (err) {
+      console.error('Cleanup error:', err);
+    }
   });
 
   describe('PATCH /admin/:id - Update admin', () => {
@@ -61,10 +80,10 @@ describe('Admin Management API - Write Operations', () => {
       const response = await request(app)
         .patch(`/admin/${targetAdminId}`)
         .set('Authorization', `Bearer ${authToken}`)
-        .send({ role: 'superadmin' });
+        .send({ role: 'admin' });
 
       expect(response.status).toBe(200);
-      expect(response.body.role).toBe('superadmin');
+      expect(response.body.role).toBe('admin');
     });
 
     test('should not allow updating email', async () => {
@@ -136,7 +155,7 @@ describe('Admin Management API - Write Operations', () => {
 
     test('should not allow deleting self', async () => {
       const response = await request(app)
-        .delete(`/admin/${adminId}`)
+        .delete(`/admin/${testAdminId}`)
         .set('Authorization', `Bearer ${authToken}`);
 
       expect(response.status).toBe(403);

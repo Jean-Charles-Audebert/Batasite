@@ -1,18 +1,26 @@
 const { pool } = require('../config/db');
 const logger = require('../utils/logger');
 const adminModel = require('../models/admin.model');
+const emailService = require('../services/email.service');
 const { validateNumericId, sendValidationError, sendNotFound } = require('../utils/validation.helpers');
+const crypto = require('crypto');
 
 /**
- * POST /admin - Create a new admin
+ * POST /admin - Create a new admin with invitation email
  */
 exports.createAdmin = async (req, res, next) => {
   try {
-    const { email, password, role } = req.body;
+    const { email, role } = req.body;
 
     // Validate required fields
-    if (!email || !password) {
-      return sendValidationError(res, 'Email and password are required');
+    if (!email) {
+      return sendValidationError(res, 'Email is required');
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return sendValidationError(res, 'Invalid email format');
     }
 
     // Validate role if provided
@@ -20,8 +28,21 @@ exports.createAdmin = async (req, res, next) => {
       return sendValidationError(res, 'Invalid role. Must be admin or superadmin');
     }
 
-    // Create admin via model (handles duplicate check)
-    const admin = await adminModel.createAdmin(email, password, role || 'admin');
+    // Générer un token de reset unique
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // Expire dans 24h
+
+    // Create admin via model with invitation
+    const admin = await adminModel.createAdminInvite(email, resetToken, tokenExpiry, role || 'admin');
+
+    // Envoyer l'email d'invitation
+    const baseUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    try {
+      await emailService.sendPasswordInviteEmail(email, resetToken, baseUrl);
+    } catch (emailError) {
+      logger.warn(`Failed to send invitation email to ${email}, but admin was created`);
+      // On continue même si l'email échoue, l'admin est créé
+    }
 
     logger.info(`Admin created by ${req.user.email}: ${email} (${admin.role})`);
     res.status(201).json(admin);
@@ -35,22 +56,13 @@ exports.createAdmin = async (req, res, next) => {
 };
 
 /**
- * GET /admin - List all admins (with optional role filter)
+ * GET /admin - List all admins (excluding superadmins, with optional role filter)
  */
 exports.getAllAdmins = async (req, res, next) => {
   try {
-    const { role } = req.query;
-    let query = 'SELECT id, email, role, is_active, created_at FROM admins';
-    const params = [];
-
-    if (role) {
-      query += ' WHERE role = $1';
-      params.push(role);
-    }
-
-    query += ' ORDER BY created_at DESC';
-
-    const result = await pool.query(query, params);
+    // Always return only regular admins (not superadmins)
+    const query = 'SELECT id, email, role, is_active, created_at FROM admins WHERE role = \'admin\' ORDER BY created_at DESC';
+    const result = await pool.query(query);
     logger.info(`Admin list retrieved by: ${req.user.email}`);
     res.json(result.rows);
   } catch (error) {
@@ -146,10 +158,27 @@ exports.updateAdmin = async (req, res, next) => {
       return sendValidationError(res, 'Provide role, password, or is_active to update');
     }
 
-    // Check if admin exists
-    const adminCheck = await pool.query('SELECT id FROM admins WHERE id = $1', [validatedId]);
+    // Check if admin exists and get their role
+    const adminCheck = await pool.query('SELECT id, role FROM admins WHERE id = $1', [validatedId]);
     if (adminCheck.rows.length === 0) {
       return sendNotFound(res, 'Admin not found');
+    }
+
+    // Prevent modifying superadmins
+    if (adminCheck.rows[0].role === 'superadmin') {
+      return res.status(403).json({ error: 'Cannot modify superadmin' });
+    }
+
+    // Security: Only the admin themselves or a superadmin can change password
+    if (password) {
+      // req.user.id is the ID of the authenticated user making the request
+      // validatedId is the ID of the admin being modified
+      const currentUserIsSuperadmin = req.user.role === 'superadmin';
+      const isModifyingSelf = parseInt(req.user.id) === parseInt(validatedId);
+      
+      if (!isModifyingSelf && !currentUserIsSuperadmin) {
+        return res.status(403).json({ error: 'You can only change your own password' });
+      }
     }
 
     // Build dynamic update query
@@ -212,10 +241,15 @@ exports.deleteAdmin = async (req, res, next) => {
       return res.status(403).json({ error: 'Cannot delete yourself' });
     }
 
-    // Check if admin exists
-    const adminCheck = await pool.query('SELECT email FROM admins WHERE id = $1', [validatedId]);
+    // Check if admin exists and get their role
+    const adminCheck = await pool.query('SELECT email, role FROM admins WHERE id = $1', [validatedId]);
     if (adminCheck.rows.length === 0) {
       return sendNotFound(res, 'Admin not found');
+    }
+
+    // Prevent deleting superadmins
+    if (adminCheck.rows[0].role === 'superadmin') {
+      return res.status(403).json({ error: 'Cannot delete superadmin' });
     }
 
     const deletedEmail = adminCheck.rows[0].email;

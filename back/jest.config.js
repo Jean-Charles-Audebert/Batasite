@@ -1,6 +1,7 @@
 module.exports = {
   testEnvironment: 'node',
   testMatch: ['**/__tests__/**/*.js', '**/src/tests/**/*.test.js'],
+  maxWorkers: 1,
   collectCoverageFrom: [
     'src/**/*.js',
     '!src/server.js',

@@ -2,8 +2,8 @@ const { Pool } = require('pg');
 require('dotenv').config();
 
 const poolConfig = {
-  user: process.env.POSTGRES_USER || 'batadmin',
-  password: process.env.POSTGRES_PASSWORD || 'batpassword',
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT, 10) || 5432,
   database: process.env.POSTGRES_DB || 'batasite',
@@ -53,13 +53,42 @@ const initDb = async () => {
       CREATE TABLE IF NOT EXISTS admins (
         id SERIAL PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
-        password_hash VARCHAR(255) NOT NULL,
+        password_hash VARCHAR(255),
         role VARCHAR(50) DEFAULT 'admin' CHECK(role IN ('admin', 'superadmin')),
         is_active BOOLEAN DEFAULT true,
+        password_reset_token VARCHAR(255),
+        password_reset_expires TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
+
+    // Ajouter les colonnes manquantes si elles n'existent pas
+    try {
+      await query(`
+        ALTER TABLE admins
+        ADD COLUMN IF NOT EXISTS password_reset_token VARCHAR(255),
+        ADD COLUMN IF NOT EXISTS password_reset_expires TIMESTAMP
+      `);
+    } catch (error) {
+      // Les colonnes existent peut-être déjà ou il y a une autre erreur
+      if (!error.message.includes('already exists')) {
+        console.warn('Note: Could not add reset token columns:', error.message);
+      }
+    }
+
+    // Si password_hash existe mais est NOT NULL, le rendre nullable
+    try {
+      await query(`
+        ALTER TABLE admins
+        ALTER COLUMN password_hash DROP NOT NULL
+      `);
+    } catch (error) {
+      // La colonne est peut-être déjà nullable
+      if (!error.message.includes('already')) {
+        console.warn('Note: Could not alter password_hash constraint:', error.message);
+      }
+    }
 
     // Table du contenu global (une seule ligne)
     await query(`

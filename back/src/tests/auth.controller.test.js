@@ -14,6 +14,12 @@ describe('Auth Controller', () => {
 
   // Cleanup après les tests
   afterAll(async () => {
+    // Clean up all test admins created during tests
+    try {
+      await db.pool.query('DELETE FROM admins WHERE email LIKE \'%test%\' OR email LIKE \'%example.com\'');
+    } catch (e) {
+      console.error('Cleanup error:', e);
+    }
     await db.closePool();
   });
 
@@ -25,79 +31,6 @@ describe('Auth Controller', () => {
     } catch (e) {
       // Ignore
     }
-  });
-
-  describe('POST /auth/register', () => {
-    test('should register a new admin successfully', async () => {
-      const response = await request(app)
-        .post('/auth/register')
-        .send({
-          email: `admin-${Date.now()}@test.com`,
-          password: 'SecurePass123!',
-        });
-
-      expect(response.status).toBe(201);
-      expect(response.body.data.email).toBeDefined();
-      expect(response.body.data.password_hash).toBeUndefined();
-      expect(response.body.data.is_active).toBe(true);
-    });
-
-    test('should reject invalid email format', async () => {
-      const response = await request(app)
-        .post('/auth/register')
-        .send({
-          email: 'not-an-email',
-          password: 'SecurePass123!',
-        });
-
-      expect(response.status).toBe(400);
-      expect(response.body.error).toBeDefined();
-    });
-
-    test('should reject duplicate email', async () => {
-      const email = `duplicate-${Date.now()}@test.com`;
-      
-      // Créer le premier admin
-      await request(app)
-        .post('/auth/register')
-        .send({
-          email,
-          password: 'SecurePass123!',
-        });
-
-      // Essayer de créer un deuxième avec le même email
-      const response = await request(app)
-        .post('/auth/register')
-        .send({
-          email,
-          password: 'SecurePass123!',
-        });
-
-      expect(response.status).toBe(409);
-      expect(response.body.error).toContain('Email already exists');
-    });
-
-    test('should reject missing email', async () => {
-      const response = await request(app)
-        .post('/auth/register')
-        .send({
-          password: 'SecurePass123!',
-        });
-
-      expect(response.status).toBe(400);
-      expect(response.body.error).toBeDefined();
-    });
-
-    test('should reject missing password', async () => {
-      const response = await request(app)
-        .post('/auth/register')
-        .send({
-          email: `admin-${Date.now()}@test.com`,
-        });
-
-      expect(response.status).toBe(400);
-      expect(response.body.error).toBeDefined();
-    });
   });
 
   describe('POST /auth/login', () => {

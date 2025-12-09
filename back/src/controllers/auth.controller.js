@@ -4,29 +4,6 @@ const { validate, loginSchema } = require('../utils/validators');
 const log = require('../utils/logger');
 
 /**
- * Register - Créer un nouvel admin
- * POST /api/auth/register
- */
-const register = async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-
-    const admin = await adminModel.createAdmin(email, password);
-
-    res.status(201).json({
-      message: 'Admin registered successfully',
-      data: admin,
-    });
-  } catch (error) {
-    if (error.status === 400 || error.status === 409) {
-      return next(error);
-    }
-    error.status = 500;
-    next(error);
-  }
-};
-
-/**
  * Login - Authentifier un admin
  * POST /api/auth/login
  */
@@ -160,9 +137,86 @@ const logout = async (req, res, next) => {
   }
 };
 
+/**
+ * Set Password from Invite - Créer un password après invitation
+ * POST /api/auth/set-password
+ */
+const setPasswordFromInvite = async (req, res, next) => {
+  try {
+    const { token, password, confirmPassword } = req.body;
+
+    // Validation
+    if (!token || !password || !confirmPassword) {
+      const err = new Error('Token, password and confirmPassword are required');
+      err.status = 400;
+      return next(err);
+    }
+
+    if (password !== confirmPassword) {
+      const err = new Error('Passwords do not match');
+      err.status = 400;
+      return next(err);
+    }
+
+    if (password.length < 8) {
+      const err = new Error('Password must be at least 8 characters long');
+      err.status = 400;
+      return next(err);
+    }
+
+    // Récupère l'admin avec le token valide
+    const admin = await adminModel.getAdminByResetToken(token);
+    if (!admin) {
+      const err = new Error('Invalid or expired reset token');
+      err.status = 400;
+      return next(err);
+    }
+
+    // Définit le password
+    const updatedAdmin = await adminModel.setPasswordFromReset(admin.id, password);
+
+    log.info(`Admin password set from invitation: ${admin.email}`);
+
+    res.json({
+      message: 'Password set successfully',
+      data: updatedAdmin,
+    });
+  } catch (error) {
+    error.status = 500;
+    next(error);
+  }
+};
+
+/**
+ * Get current user info
+ * GET /api/auth/me
+ * @auth Required
+ */
+const getCurrentUser = async (req, res, next) => {
+  try {
+    const admin = await adminModel.getAdminById(req.user.id);
+    if (!admin) {
+      const err = new Error('Admin not found');
+      err.status = 404;
+      return next(err);
+    }
+
+    // Retourne sans le hash du mot de passe
+    const { password_hash, ...adminData } = admin;
+
+    res.json({
+      data: adminData,
+    });
+  } catch (error) {
+    error.status = 500;
+    next(error);
+  }
+};
+
 module.exports = {
-  register,
   login,
   refresh,
   logout,
+  setPasswordFromInvite,
+  getCurrentUser,
 };

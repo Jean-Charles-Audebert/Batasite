@@ -1,7 +1,7 @@
 const express = require('express');
+require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') }); // Load environment variables FIRST from root .env
 const { initDb, seedAdmins, testConnection } = require('./config/db');
 const logger = require('./utils/logger');
-require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
