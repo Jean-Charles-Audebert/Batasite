@@ -16,23 +16,32 @@ describe('Content Management API', () => {
   let adminId;
 
   beforeAll(async () => {
-    // Créer un admin de test
+    // Clean up all content from previous test runs to avoid FK violations
+    try {
+      await query('TRUNCATE TABLE content RESTART IDENTITY CASCADE');
+    } catch (err) {
+      // If TRUNCATE fails, try DELETE
+      await query('DELETE FROM content');
+    }
+    
+    // Créer un admin de test unique
+    const uniqueEmail = `content-test-${Date.now()}@example.com`;
     const res = await query(
       'INSERT INTO admins (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id',
-      ['content-test@example.com', 'dummyhash', 'admin']
+      [uniqueEmail, 'dummyhash', 'admin']
     );
     adminId = res.rows[0].id;
 
     // Générer un token
     authToken = generateAccessToken({
       id: adminId,
-      email: 'content-test@example.com',
+      email: uniqueEmail,
       role: 'admin',
     });
   });
 
   afterAll(async () => {
-    // Cleanup
+    // Cleanup - must delete content before admin due to FK constraint
     await query('DELETE FROM content WHERE updated_by = $1', [adminId]);
     await query('DELETE FROM admins WHERE id = $1', [adminId]);
   });

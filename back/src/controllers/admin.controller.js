@@ -1,6 +1,38 @@
 const { pool } = require('../config/db');
 const logger = require('../utils/logger');
+const adminModel = require('../models/admin.model');
 const { validateNumericId, sendValidationError, sendNotFound } = require('../utils/validation.helpers');
+
+/**
+ * POST /admin - Create a new admin
+ */
+exports.createAdmin = async (req, res, next) => {
+  try {
+    const { email, password, role } = req.body;
+
+    // Validate required fields
+    if (!email || !password) {
+      return sendValidationError(res, 'Email and password are required');
+    }
+
+    // Validate role if provided
+    if (role && !['admin', 'superadmin'].includes(role)) {
+      return sendValidationError(res, 'Invalid role. Must be admin or superadmin');
+    }
+
+    // Create admin via model (handles duplicate check)
+    const admin = await adminModel.createAdmin(email, password, role || 'admin');
+
+    logger.info(`Admin created by ${req.user.email}: ${email} (${admin.role})`);
+    res.status(201).json(admin);
+  } catch (error) {
+    if (error.message.includes('already exists')) {
+      return sendValidationError(res, error.message);
+    }
+    logger.error(`Error creating admin: ${error.message}`);
+    next(error);
+  }
+};
 
 /**
  * GET /admin - List all admins (with optional role filter)
@@ -91,12 +123,12 @@ exports.getAdminActivity = async (req, res, next) => {
 };
 
 /**
- * PATCH /admin/:id - Update admin role or is_active
+ * PATCH /admin/:id - Update admin role, password, or is_active
  */
 exports.updateAdmin = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { role, is_active } = req.body;
+    const { role, is_active, password } = req.body;
 
     // Validate ID is a number
     const { valid, id: validatedId } = validateNumericId(id);
@@ -104,14 +136,14 @@ exports.updateAdmin = async (req, res, next) => {
       return sendValidationError(res, 'Invalid admin ID format');
     }
 
-    // Prevent updating email or password_hash
-    if (req.body.email || req.body.password_hash) {
-      return sendValidationError(res, 'Cannot update email or password via PATCH');
+    // Prevent updating email
+    if (req.body.email) {
+      return sendValidationError(res, 'Cannot update email via PATCH');
     }
 
     // Validate at least one field is being updated
-    if (!role && is_active === undefined) {
-      return sendValidationError(res, 'Provide role or is_active to update');
+    if (!role && is_active === undefined && !password) {
+      return sendValidationError(res, 'Provide role, password, or is_active to update');
     }
 
     // Check if admin exists
@@ -137,6 +169,15 @@ exports.updateAdmin = async (req, res, next) => {
       paramIndex++;
     }
 
+    // Handle password update
+    if (password) {
+      const { hashPassword } = require('../utils/auth');
+      const passwordHash = await hashPassword(password);
+      updates.push(`password_hash = $${paramIndex}`);
+      values.push(passwordHash);
+      paramIndex++;
+    }
+
     // Set updated_at
     updates.push(`updated_at = NOW()`);
 
@@ -145,7 +186,7 @@ exports.updateAdmin = async (req, res, next) => {
     const query = `UPDATE admins SET ${updates.join(', ')} WHERE id = $${paramIndex} RETURNING id, email, role, is_active, updated_at`;
     const result = await pool.query(query, values);
 
-    logger.info(`Admin ${validatedId} updated by: ${req.user.email} (role: ${role}, is_active: ${is_active})`);
+    logger.info(`Admin ${validatedId} updated by: ${req.user.email} (role: ${role}, password: ${password ? 'changed' : 'unchanged'}, is_active: ${is_active})`);
     res.json(result.rows[0]);
   } catch (error) {
     logger.error(`Error updating admin: ${error.message}`);

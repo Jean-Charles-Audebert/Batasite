@@ -76,13 +76,14 @@ describe('Admin Management API - Write Operations', () => {
       expect(response.status).toBe(400);
     });
 
-    test('should not allow updating password via PATCH', async () => {
+    test('should allow updating password via PATCH', async () => {
       const response = await request(app)
         .patch(`/admin/${targetAdminId}`)
         .set('Authorization', `Bearer ${authToken}`)
         .send({ password: 'NewPassword123!' });
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(200);
+      expect(response.body.id).toBe(targetAdminId);
     });
 
     test('should return 404 for non-existent admin', async () => {

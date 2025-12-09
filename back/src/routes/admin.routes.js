@@ -15,6 +15,14 @@ router.use(authMiddleware);
 router.get('/', adminController.getAllAdmins);
 
 /**
+ * Create a new admin
+ * @route POST /admin
+ * @body {Object} {email, password, role}
+ * @returns {Object} Created admin object
+ */
+router.post('/', adminController.createAdmin);
+
+/**
  * Fetch single admin by ID
  * @route GET /admin/:id
  * @param {number} id - Admin ID

@@ -43,8 +43,7 @@ describe('Admin Management API', () => {
   });
 
   afterAll(async () => {
-    // No need to cleanup - just end pool
-    await pool.end();
+    // Let auth.controller.test handle pool cleanup
   });
 
   describe('GET /admin - List all admins', () => {
@@ -99,6 +98,10 @@ describe('Admin Management API', () => {
 
   describe('GET /admin/:id - Fetch single admin', () => {
     test('should return admin by ID (200)', async () => {
+      // Debug: check if testAdminId exists
+      if (!testAdminId) {
+        console.error('[DEBUG] testAdminId is', testAdminId);
+      }
       const response = await request(app)
         .get(`/admin/${testAdminId}`)
         .set('Authorization', `Bearer ${authToken}`);
@@ -167,6 +170,165 @@ describe('Admin Management API', () => {
     test('should return 404 for non-existent admin', async () => {
       const response = await request(app)
         .get('/admin/99999/activity')
+        .set('Authorization', `Bearer ${authToken}`);
+
+      expect(response.status).toBe(404);
+    });
+  });
+
+  describe('POST /admin - Create admin', () => {
+    test('should create admin with email, password, role (201)', async () => {
+      const response = await request(app)
+        .post('/admin')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          email: `new-admin-${Date.now()}@example.com`,
+          password: 'NewPassword123!',
+          role: 'admin',
+        });
+
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveProperty('id');
+      expect(response.body).toHaveProperty('email');
+      expect(response.body.role).toBe('admin');
+      expect(response.body).not.toHaveProperty('password_hash');
+    });
+
+    test('should create admin as superadmin', async () => {
+      const response = await request(app)
+        .post('/admin')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          email: `super-${Date.now()}@example.com`,
+          password: 'SuperPassword123!',
+          role: 'superadmin',
+        });
+
+      expect(response.status).toBe(201);
+      expect(response.body.role).toBe('superadmin');
+    });
+
+    test('should return 400 if missing email', async () => {
+      const response = await request(app)
+        .post('/admin')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          password: 'Password123!',
+          role: 'admin',
+        });
+
+      expect(response.status).toBe(400);
+    });
+
+    test('should return 400 if missing password', async () => {
+      const response = await request(app)
+        .post('/admin')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          email: `admin-${Date.now()}@example.com`,
+          role: 'admin',
+        });
+
+      expect(response.status).toBe(400);
+    });
+
+    test('should return 401 without JWT', async () => {
+      const response = await request(app)
+        .post('/admin')
+        .send({
+          email: `admin-${Date.now()}@example.com`,
+          password: 'Password123!',
+          role: 'admin',
+        });
+
+      expect(response.status).toBe(401);
+    });
+  });
+
+  describe('PATCH /admin/:id - Update admin', () => {
+    test('should update admin role (200)', async () => {
+      const response = await request(app)
+        .patch(`/admin/${testAdminId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          role: 'superadmin',
+        });
+
+      expect(response.status).toBe(200);
+      expect(response.body.role).toBe('superadmin');
+    });
+
+    test('should update admin password', async () => {
+      const response = await request(app)
+        .patch(`/admin/${testAdminId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          password: 'NewPassword456!',
+        });
+
+      expect(response.status).toBe(200);
+      expect(response.body).not.toHaveProperty('password_hash');
+    });
+
+    test('should return 400 if invalid ID', async () => {
+      const response = await request(app)
+        .patch('/admin/invalid')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          role: 'admin',
+        });
+
+      expect(response.status).toBe(400);
+    });
+
+    test('should return 401 without JWT', async () => {
+      const response = await request(app)
+        .patch(`/admin/${testAdminId}`)
+        .send({
+          role: 'admin',
+        });
+
+      expect(response.status).toBe(401);
+    });
+  });
+
+  describe('DELETE /admin/:id - Delete admin', () => {
+    test('should delete admin (200)', async () => {
+      // Create an admin to delete
+      const createRes = await request(app)
+        .post('/admin')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          email: `delete-me-${Date.now()}@example.com`,
+          password: 'Password123!',
+          role: 'admin',
+        });
+
+      const deleteRes = await request(app)
+        .delete(`/admin/${createRes.body.id}`)
+        .set('Authorization', `Bearer ${authToken}`);
+
+      expect(deleteRes.status).toBe(200);
+      expect(deleteRes.body).toHaveProperty('message');
+    });
+
+    test('should return 400 if invalid ID', async () => {
+      const response = await request(app)
+        .delete('/admin/invalid')
+        .set('Authorization', `Bearer ${authToken}`);
+
+      expect(response.status).toBe(400);
+    });
+
+    test('should return 401 without JWT', async () => {
+      const response = await request(app).delete(`/admin/${testAdminId}`);
+
+      expect(response.status).toBe(401);
+    });
+
+    test('should return 404 for non-existent admin', async () => {
+      const response = await request(app)
+        .delete('/admin/99999')
         .set('Authorization', `Bearer ${authToken}`);
 
       expect(response.status).toBe(404);
