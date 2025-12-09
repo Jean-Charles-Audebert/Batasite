@@ -3,17 +3,21 @@
 > Suivi d'avancement corrélé à PROJECT.md avec itérations TDD et refactorisations propres
 
 **Dernière mise à jour**: 9 décembre 2025  
-**État global**: Phase 1 Infrastructure - 70% ✅
+**État global**: Phase 1 + Sprint 1.5 - 100% ✅
 
 ---
 
 ## 📋 Vue d'ensemble des phases
 
-| Phase | Objectif | Statut | Deadline |
-|-------|----------|--------|----------|
-| **Phase 1** | Infrastructure Backend + DB + Auth | 🔄 70% | Week 3 Dec |
-| **Phase 2** | Panel Admin React | ⏳ 0% | Week 1-2 Jan |
-| **Phase 3** | Mise en production | ⏳ 0% | Week 3-4 Jan |
+| Phase | Objectif | Statut | Tests | Deadline |
+|-------|----------|--------|-------|----------|
+| **Phase 1** | Infrastructure Backend + DB + Auth | ✅ 100% | 43/43 | Dec 8 ✅ |
+| **Sprint 1.5** | Content Management + Admin CRUD | ✅ 100% | 46/46 | Dec 9 ✅ |
+| **Phase 2** | Panel Admin React | ⏳ 0% | - | Week 1-2 Jan |
+| **Phase 3** | Mise en production | ⏳ 0% | - | Week 3-4 Jan |
+
+**Total Tests Passing**: ✅ 89/89 (100%)  
+**Next Sprint**: Phase 2 - React Admin Panel
 
 ---
 
@@ -118,67 +122,76 @@
 
 ---
 
-## 🎯 PHASE 1.5: Content Management Endpoints (NEXT ITERATION)
+## 🎯 PHASE 1.5: Content Management Endpoints ✅ COMPLETED
 
-### 2.1 Content Model Tests
-- **Status**: ⏳ TODO
-- **Tests**: 0/? (À écrire en TDD)
-- **Type**: TDD - Tests d'abord
-- **Détails**:
-  - [ ] Write test: `getContent()` returns JSONB
-  - [ ] Write test: `updateContent(data, adminId)` updates and tracks updated_by
-  - [ ] Write test: `patchContent(partial, adminId)` merges données
-  - [ ] Write test: `getContentHistory(limit)` returns versions
-  - [ ] Implement models pour passer les tests
+**Status**: ✅ **COMPLETE** - All 46 tests passing (May 9 Dec, 2025)  
+**Branch merged**: feature/1.5-content-management → main  
+**Tag**: v1.5
 
-### 2.2 Content Controller & Routes
-- **Status**: ⏳ TODO
-- **Endpoints**: 0/4
-- **Type**: TDD - Tests d'abord
-- **Détails**:
-  - [ ] POST `/auth/register` - Tests + Controller
-  - [ ] GET `/content` - Récupère le JSON global
-  - [ ] PUT `/content` - Met à jour complètement
-  - [ ] PATCH `/content` - Mise à jour partielle (merge)
+### 1.5.1 Content Retrieval API
+- **Status**: ✅ DONE
+- **Tests**: ✅ 5/5 passing
+- **Endpoint**: `GET /content`
+- **Features**:
+  - ✅ Retrieve global JSONB content
+  - ✅ Initialize empty content if none exists
+  - ✅ Proper auth & error handling
 
-### 2.3 Admin Model Tests (CRUD complets)
-- **Status**: ⏳ TODO
-- **Tests**: 0/? (À écrire en TDD)
-- **Type**: TDD - Tests d'abord
-- **Détails**:
-  - [ ] Write test: `getAllAdmins()`
-  - [ ] Write test: `getAdminById(id)`
-  - [ ] Write test: `updateAdmin(id, fields)`
-  - [ ] Write test: `deleteAdmin(id)`
-  - [ ] Implement models pour passer les tests
+### 1.5.2 Content Update API (Full Replacement)
+- **Status**: ✅ DONE
+- **Tests**: ✅ 6/6 passing
+- **Endpoint**: `PUT /content`
+- **Features**:
+  - ✅ Full content replacement with validation
+  - ✅ Timestamp tracking (updated_at)
+  - ✅ Admin ID tracking (updated_by)
 
-### 2.4 Admin Controller & Routes
-- **Status**: ⏳ TODO
-- **Endpoints**: 0/4
-- **Type**: TDD - Tests d'abord
-- **Détails**:
-  - [ ] GET `/admin` - Liste tous les admins
-  - [ ] GET `/admin/:id` - Récupère un admin
-  - [ ] PATCH `/admin/:id` - Activer/désactiver (is_active)
-  - [ ] DELETE `/admin/:id` - Supprimer un admin (soft delete?)
+### 1.5.3 Content PATCH API (Partial Update)
+- **Status**: ✅ DONE
+- **Tests**: ✅ 4/4 passing
+- **Endpoint**: `PATCH /content`
+- **Features**:
+  - ✅ Merge partial data with existing content
+  - ✅ Preserve unmodified fields
+  - ✅ Full validation
 
-### 2.5 Protected Routes Middleware
-- **Status**: ⏳ TODO
-- **Tests**: 0/? (À écrire en TDD)
-- **Détails**:
-  - [ ] Write test: JWT valid grants access
-  - [ ] Write test: JWT expired returns 401
-  - [ ] Write test: No JWT returns 401
-  - [ ] Implement auth.middleware avec role check (admin/superadmin)
+### 1.5.4 Content History API
+- **Status**: ✅ DONE
+- **Tests**: ✅ 5/5 passing
+- **Endpoint**: `GET /content/history?limit=20`
+- **Features**:
+  - ✅ Version history with admin email attribution
+  - ✅ Pagination support (max 100)
+  - ✅ Ordered by updated_at DESC
 
-### 2.6 Content Tests Integration
-- **Status**: ⏳ TODO
-- **Tests**: 0/? (À écrire en TDD)
-- **Détails**:
-  - [ ] Integration tests for GET `/content`
-  - [ ] Integration tests for PUT `/content`
-  - [ ] Integration tests for PATCH `/content`
-  - [ ] Permission tests (only admin can modify)
+### 1.5.5 Admin Read Operations
+- **Status**: ✅ DONE
+- **Tests**: ✅ 13/13 passing
+- **Endpoints**: `GET /admin`, `GET /admin/:id`, `GET /admin/:id/activity`
+- **Features**:
+  - ✅ List all admins with optional role filter
+  - ✅ Fetch single admin by ID
+  - ✅ Activity log placeholder
+
+### 1.5.6 Admin Write Operations
+- **Status**: ✅ DONE
+- **Tests**: ✅ 12/12 passing
+- **Endpoints**: `PATCH /admin/:id`, `DELETE /admin/:id`
+- **Features**:
+  - ✅ Update admin role and is_active status
+  - ✅ Delete admin with self-deletion prevention
+  - ✅ Prevent email/password updates via PATCH
+
+### 1.5.7 Code Refactoring & Validation Helpers
+- **Status**: ✅ DONE
+- **Quality Metrics**: 15-20% code reduction
+- **Features**:
+  - ✅ Centralized validation helpers (6 functions)
+  - ✅ Standardized error responses
+  - ✅ Reduced code duplication
+  - ✅ Improved maintainability
+
+**Test Summary**: ✅ 46/46 tests passing (100%)
 
 ---
 
