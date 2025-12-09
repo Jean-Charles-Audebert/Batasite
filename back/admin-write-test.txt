@@ -1,0 +1,168 @@
+
+> back@1.0.0 test
+> jest --forceExit admin.write.test.js
+
+  console.log
+    [dotenv@17.2.3] injecting env (16) from .env -- tip: ÔÜÖ´©Å  load multiple .env files with { path: ['.env.local', '.env'] }
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+  console.log
+    [dotenv@17.2.3] injecting env (0) from .env -- tip: ­ƒæÑ sync secrets across teammates & machines: https://dotenvx.com/ops
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+  console.log
+    Database config: {
+      user: 'batadmin',
+      host: 'localhost',
+      port: 5434,
+      database: 'batasite'
+    }
+
+      at Object.log (src/config/db.js:12:9)
+
+  console.log
+    [dotenv@17.2.3] injecting env (0) from .env -- tip: ­ƒöÉ prevent committing .env to code: https://dotenvx.com/precommit
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+  console.log
+    Query executed: {
+      queryText: 'SELECT id FROM admins WHERE email = $1',
+      duration: 34,
+      rows: 0
+    }
+
+      at log (src/config/db.js:36:13)
+
+  console.log
+    Query executed: {
+      queryText: 'INSERT INTO admins (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id, email, role, is_active, created_at',
+      duration: 5,
+      rows: 1
+    }
+
+      at log (src/config/db.js:36:13)
+
+  console.log
+    [INFO] Admin created: {
+      id: 72,
+      email: 'admin-write-1765275764310@example.com',
+      role: 'admin',
+      is_active: true,
+      created_at: 2025-12-09T09:22:44.406Z
+    }
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+  console.log
+    Query executed: {
+      queryText: 'SELECT id, email, password_hash, role, is_active FROM admins WHERE email = $1',
+      duration: 2,
+      rows: 1
+    }
+
+      at log (src/config/db.js:36:13)
+
+  console.log
+    [INFO] Admin logged in: admin-write-1765275764310@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+  console.log
+    Query executed: {
+      queryText: 'SELECT id FROM admins WHERE email = $1',
+      duration: 2,
+      rows: 0
+    }
+
+      at log (src/config/db.js:36:13)
+
+  console.log
+    Query executed: {
+      queryText: 'INSERT INTO admins (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id, email, role, is_active, created_at',
+      duration: 3,
+      rows: 1
+    }
+
+      at log (src/config/db.js:36:13)
+
+  console.log
+    [INFO] Admin created: {
+      id: 73,
+      email: 'target-admin-1765275764449@example.com',
+      role: 'admin',
+      is_active: true,
+      created_at: 2025-12-09T09:22:44.480Z
+    }
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+  console.log
+    [INFO] Admin 73 updated by: admin-write-1765275764310@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+  console.log
+    [INFO] Admin 73 updated by: admin-write-1765275764310@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+  console.log
+    Query executed: {
+      queryText: 'SELECT id FROM admins WHERE email = $1',
+      duration: 2,
+      rows: 0
+    }
+
+      at log (src/config/db.js:36:13)
+
+  console.log
+    Query executed: {
+      queryText: 'INSERT INTO admins (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id, email, role, is_active, created_at',
+      duration: 3,
+      rows: 1
+    }
+
+      at log (src/config/db.js:36:13)
+
+  console.log
+    [INFO] Admin created: {
+      id: 74,
+      email: 'temp-admin-1765275764526@example.com',
+      role: 'admin',
+      is_active: true,
+      created_at: 2025-12-09T09:22:44.554Z
+    }
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+  console.log
+    [INFO] Admin 74 deleted by: admin-write-1765275764310@example.com
+
+      at Object.log [as info] (src/utils/logger.js:6:13)
+
+PASS src/tests/admin.write.test.js
+  Admin Management API - Write Operations
+    PATCH /admin/:id - Update admin
+      ÔêÜ should update admin and return 200 (14 ms)
+      ÔêÜ should update admin role (8 ms)
+      ÔêÜ should not allow updating email (4 ms)
+      ÔêÜ should not allow updating password via PATCH (4 ms)
+      ÔêÜ should return 404 for non-existent admin (4 ms)
+      ÔêÜ should return 400 for invalid admin ID format (4 ms)
+      ÔêÜ should return 401 without JWT (3 ms)
+    DELETE /admin/:id - Delete admin
+      ÔêÜ should delete admin and return 200 (40 ms)
+      ÔêÜ should not allow deleting self (4 ms)
+      ÔêÜ should return 404 for non-existent admin (5 ms)
+      ÔêÜ should return 400 for invalid admin ID format (3 ms)
+      ÔêÜ should return 401 without JWT (3 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       12 passed, 12 total
+Snapshots:   0 total
+Time:        1.004 s
+Ran all test suites matching admin.write.test.js.
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
