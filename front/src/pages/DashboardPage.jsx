@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import { ContentPage } from './ContentPage';
+import { AdminPage } from './AdminPage';
 import styles from './DashboardPage.module.css';
 
 /**
@@ -78,12 +79,8 @@ function ContentSection() {
 }
 
 /**
- * Section admins (US-2.4)
+ * Section admins (US-2.3)
  */
 function AdminSection() {
-  return (
-    <div>
-      <p>Section administrateurs - À implémenter (US-2.4)</p>
-    </div>
-  );
+  return <AdminPage />;
 }
