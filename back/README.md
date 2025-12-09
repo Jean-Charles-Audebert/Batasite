@@ -53,11 +53,12 @@ Voir `.env` à la racine du projet. Les variables principales :
 {
   id: number (PK),
   email: string (unique),
-  username: string (unique),
   password_hash: string (argon2id),
+  role: string ('admin' | 'superadmin'),
   is_active: boolean,
   created_at: timestamp,
   updated_at: timestamp
+}
 }
 ```
 
@@ -75,22 +76,22 @@ Voir `.env` à la racine du projet. Les variables principales :
 ## API Endpoints (à implémenter)
 
 ### Authentication
-- `POST /api/auth/register` - Créer un admin
-- `POST /api/auth/login` - Se connecter
-- `POST /api/auth/refresh` - Rafraîchir le token
-- `POST /api/auth/logout` - Se déconnecter
+- `POST /auth/register` - Créer un admin
+- `POST /auth/login` - Se connecter
+- `POST /auth/refresh` - Rafraîchir le token
+- `POST /auth/logout` - Se déconnecter
 
 ### Admin Management
-- `GET /api/admin` - Lister les admins
-- `GET /api/admin/:id` - Récupérer un admin
-- `PATCH /api/admin/:id` - Activer/désactiver un admin
-- `DELETE /api/admin/:id` - Supprimer un admin
+- `GET /admin` - Lister les admins
+- `POST /admin` - Créer un admin
+- `PUT /admin/:id` - Mettre à jour un admin
+- `DELETE /admin/:id` - Supprimer un admin
 
 ### Content Management
-- `GET /api/content` - Récupérer le contenu global
-- `PUT /api/content` - Mettre à jour le contenu
-- `PATCH /api/content` - Mettre à jour partiellement
-- `GET /api/content/history` - Historique des mises à jour
+- `GET /content` - Récupérer le contenu global
+- `PUT /content` - Mettre à jour le contenu
+- `PATCH /content` - Mettre à jour partiellement
+- `GET /content/history` - Historique des mises à jour
 
 ## Principes
 

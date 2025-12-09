@@ -9,13 +9,13 @@ const log = require('../utils/logger');
 const getContent = async () => {
   try {
     const res = await query(
-      'SELECT id, data, updated_at FROM content ORDER BY id DESC LIMIT 1'
+      'SELECT id, content, updated_at FROM content ORDER BY id DESC LIMIT 1'
     );
 
     if (res.rows.length === 0) {
       // Crée un contenu par défaut si aucun n'existe
       const defaultContent = await query(
-        'INSERT INTO content (data) VALUES ($1) RETURNING id, data, updated_at',
+        'INSERT INTO content (content) VALUES ($1) RETURNING id, content, updated_at',
         ['{}']
       );
       return defaultContent.rows[0];
@@ -50,7 +50,7 @@ const updateContent = async (data, adminId) => {
 
     if (existing.rows.length === 0) {
       const created = await query(
-        'INSERT INTO content (data, updated_by) VALUES ($1, $2) RETURNING id',
+        'INSERT INTO content (content, updated_by) VALUES ($1, $2) RETURNING id',
         [JSON.stringify(data), adminId]
       );
       contentId = created.rows[0].id;
@@ -60,7 +60,7 @@ const updateContent = async (data, adminId) => {
 
     // Met à jour le contenu
     const res = await query(
-      'UPDATE content SET data = $1, updated_at = CURRENT_TIMESTAMP, updated_by = $2 WHERE id = $3 RETURNING id, data, updated_at, updated_by',
+      'UPDATE content SET content = $1, updated_at = CURRENT_TIMESTAMP, updated_by = $2 WHERE id = $3 RETURNING id, content, updated_at, updated_by',
       [JSON.stringify(data), adminId, contentId]
     );
 
@@ -80,7 +80,7 @@ const updateContent = async (data, adminId) => {
 const getContentHistory = async (limit = 20) => {
   try {
     const res = await query(
-      `SELECT c.id, c.data, c.updated_at, a.username 
+      `SELECT c.id, c.content, c.updated_at, a.email 
        FROM content c
        LEFT JOIN admins a ON c.updated_by = a.id
        ORDER BY c.updated_at DESC
@@ -104,7 +104,7 @@ const patchContent = async (partialData, adminId) => {
   try {
     // Récupère le contenu existant
     const existing = await getContent();
-    const currentData = existing.data || {};
+    const currentData = existing.content || {};
 
     // Fusion profonde (simple pour le moment)
     const mergedData = { ...currentData, ...partialData };

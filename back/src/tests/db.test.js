@@ -37,7 +37,7 @@ describe.skip('Database Tests (Intégration)', () => {
     const columnNames = columnsResult.rows.map(r => r.column_name);
     expect(columnNames).toContain('id');
     expect(columnNames).toContain('email');
-    expect(columnNames).toContain('username');
+    expect(columnNames).toContain('role');
     expect(columnNames).toContain('password_hash');
     expect(columnNames).toContain('is_active');
     expect(columnNames).toContain('created_at');
@@ -52,7 +52,7 @@ describe.skip('Database Tests (Intégration)', () => {
 
     const columnNames = columnsResult.rows.map(r => r.column_name);
     expect(columnNames).toContain('id');
-    expect(columnNames).toContain('data');
+    expect(columnNames).toContain('content');
     expect(columnNames).toContain('created_at');
     expect(columnNames).toContain('updated_at');
     expect(columnNames).toContain('updated_by');

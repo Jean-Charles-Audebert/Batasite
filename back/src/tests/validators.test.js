@@ -8,21 +8,18 @@ describe('Validators', () => {
     test('should validate a valid admin creation object', () => {
       const data = {
         email: 'admin@example.com',
-        username: 'adminuser',
         password: 'SecurePassword123!',
       };
       const { error, value } = validate(adminCreateSchema, data);
 
       expect(error).toBeUndefined();
       expect(value.email).toBe(data.email);
-      expect(value.username).toBe(data.username);
       expect(value.password).toBe(data.password);
     });
 
     test('should reject invalid email', () => {
       const data = {
         email: 'not-an-email',
-        username: 'adminuser',
         password: 'SecurePassword123!',
       };
       const { error } = validate(adminCreateSchema, data);
@@ -31,33 +28,9 @@ describe('Validators', () => {
       expect(error.details.some(d => d.path.includes('email'))).toBe(true);
     });
 
-    test('should reject username with special characters', () => {
-      const data = {
-        email: 'admin@example.com',
-        username: 'admin@user',
-        password: 'SecurePassword123!',
-      };
-      const { error } = validate(adminCreateSchema, data);
-
-      expect(error).toBeDefined();
-      expect(error.details.some(d => d.path.includes('username'))).toBe(true);
-    });
-
-    test('should reject short username', () => {
-      const data = {
-        email: 'admin@example.com',
-        username: 'ab',
-        password: 'SecurePassword123!',
-      };
-      const { error } = validate(adminCreateSchema, data);
-
-      expect(error).toBeDefined();
-    });
-
     test('should reject short password', () => {
       const data = {
         email: 'admin@example.com',
-        username: 'adminuser',
         password: 'Short1!',
       };
       const { error } = validate(adminCreateSchema, data);
@@ -66,17 +39,29 @@ describe('Validators', () => {
       expect(error.details.some(d => d.path.includes('password'))).toBe(true);
     });
 
-    test('should reject missing required fields', () => {
-      const { error } = validate(adminCreateSchema, {});
+    test('should reject missing email', () => {
+      const data = {
+        password: 'SecurePassword123!',
+      };
+      const { error } = validate(adminCreateSchema, data);
 
       expect(error).toBeDefined();
-      expect(error.details.length).toBeGreaterThan(0);
+      expect(error.details.some(d => d.path.includes('email'))).toBe(true);
+    });
+
+    test('should reject missing password', () => {
+      const data = {
+        email: 'admin@example.com',
+      };
+      const { error } = validate(adminCreateSchema, data);
+
+      expect(error).toBeDefined();
+      expect(error.details.some(d => d.path.includes('password'))).toBe(true);
     });
 
     test('should strip unknown fields', () => {
       const data = {
         email: 'admin@example.com',
-        username: 'adminuser',
         password: 'SecurePassword123!',
         unknownField: 'should be removed',
       };

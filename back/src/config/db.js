@@ -53,8 +53,8 @@ const initDb = async () => {
       CREATE TABLE IF NOT EXISTS admins (
         id SERIAL PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
-        username VARCHAR(100) UNIQUE NOT NULL,
         password_hash VARCHAR(255) NOT NULL,
+        role VARCHAR(50) DEFAULT 'admin' CHECK(role IN ('admin', 'superadmin')),
         is_active BOOLEAN DEFAULT true,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -65,7 +65,7 @@ const initDb = async () => {
     await query(`
       CREATE TABLE IF NOT EXISTS content (
         id SERIAL PRIMARY KEY,
-        data JSONB NOT NULL DEFAULT '{}',
+        content JSONB NOT NULL DEFAULT '{}',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_by INTEGER REFERENCES admins(id) ON DELETE SET NULL

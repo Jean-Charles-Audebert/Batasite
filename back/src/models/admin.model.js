@@ -1,18 +1,18 @@
 const { query } = require('../config/db');
-const { hashPassword, verifyPassword } = require('../utils/auth');
+const { hashPassword } = require('../utils/auth');
 const { validate, adminCreateSchema, adminUpdateSchema } = require('../utils/validators');
 const log = require('../utils/logger');
 
 /**
  * Crée un nouvel admin
  * @param {string} email - Email de l'admin
- * @param {string} username - Nom d'utilisateur
  * @param {string} password - Mot de passe en clair
+ * @param {string} role - Role ('admin' ou 'superadmin')
  * @returns {Promise<object>} Admin créé (sans mot de passe)
  */
-const createAdmin = async (email, username, password) => {
+const createAdmin = async (email, password, role = 'admin') => {
   // Validation
-  const { error, value } = validate(adminCreateSchema, { email, username, password });
+  const { error, value } = validate(adminCreateSchema, { email, password });
   if (error) {
     const err = new Error(error.details.map(d => d.message).join(', '));
     err.status = 400;
@@ -28,11 +28,10 @@ const createAdmin = async (email, username, password) => {
       throw err;
     }
 
-    // Vérifier si l'username existe
-    const existingUsername = await query('SELECT id FROM admins WHERE username = $1', [username]);
-    if (existingUsername.rows.length > 0) {
-      const err = new Error('Username already exists');
-      err.status = 409;
+    // Valider le role
+    if (!['admin', 'superadmin'].includes(role)) {
+      const err = new Error('Invalid role');
+      err.status = 400;
       throw err;
     }
 
@@ -41,8 +40,8 @@ const createAdmin = async (email, username, password) => {
 
     // Insère l'admin
     const res = await query(
-      'INSERT INTO admins (email, username, password_hash) VALUES ($1, $2, $3) RETURNING id, email, username, is_active, created_at',
-      [email, username, passwordHash]
+      'INSERT INTO admins (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id, email, role, is_active, created_at',
+      [email, passwordHash, role]
     );
 
     log.info('Admin created:', res.rows[0]);
@@ -60,7 +59,7 @@ const createAdmin = async (email, username, password) => {
  */
 const getAdminByEmail = async (email) => {
   try {
-    const res = await query('SELECT id, email, username, password_hash, is_active FROM admins WHERE email = $1', [email]);
+    const res = await query('SELECT id, email, password_hash, role, is_active FROM admins WHERE email = $1', [email]);
     return res.rows[0] || null;
   } catch (error) {
     log.error('Error getting admin by email:', error);
@@ -76,7 +75,7 @@ const getAdminByEmail = async (email) => {
 const getAdminById = async (id) => {
   try {
     const res = await query(
-      'SELECT id, email, username, is_active, created_at, updated_at FROM admins WHERE id = $1',
+      'SELECT id, email, role, is_active, created_at, updated_at FROM admins WHERE id = $1',
       [id]
     );
     return res.rows[0] || null;
@@ -93,7 +92,7 @@ const getAdminById = async (id) => {
 const getAllAdmins = async () => {
   try {
     const res = await query(
-      'SELECT id, email, username, is_active, created_at, updated_at FROM admins ORDER BY created_at DESC'
+      'SELECT id, email, role, is_active, created_at, updated_at FROM admins ORDER BY created_at DESC'
     );
     return res.rows;
   } catch (error) {
@@ -119,7 +118,7 @@ const updateAdminStatus = async (id, isActive) => {
 
   try {
     const res = await query(
-      'UPDATE admins SET is_active = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING id, email, username, is_active, updated_at',
+      'UPDATE admins SET is_active = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING id, email, role, is_active, updated_at',
       [isActive, id]
     );
 

@@ -25,10 +25,10 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Routes (à ajouter)
-// app.use('/api/auth', require('./routes/auth.routes'));
-// app.use('/api/admin', require('./routes/admin.routes'));
-// app.use('/api/content', require('./routes/content.routes'));
+// Routes API
+app.use('/auth', require('./routes/auth.routes'));
+// app.use('/admin', require('./routes/admin.routes'));
+// app.use('/content', require('./routes/content.routes'));
 
 // 404 handler
 app.use((req, res) => {
