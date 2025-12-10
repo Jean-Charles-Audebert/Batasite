@@ -1,5 +1,28 @@
 const { Pool } = require('pg');
+const fs = require("fs");
+const path = require("path");
 require('dotenv').config();
+
+// Charger data.json depuis le répertoire front
+const dataPath = path.join(__dirname, "../../front/data.json");
+
+let initialContentFromFile = {};
+
+try {
+  const raw = fs.readFileSync(dataPath, "utf-8");
+  initialContentFromFile = JSON.parse(raw);
+  console.log("✓ Loaded initial content from data.json");
+} catch (error) {
+  console.warn("⚠ Failed to load data.json, using fallback seed:", error.message);
+  // Fallback: contenu par défaut si data.json n'existe pas
+  initialContentFromFile = {
+    page: { title: "Batala La Rochelle" },
+    hero: { navLinks: { items: [] }, socialLinks: { items: [] } },
+    sections: [],
+    footer: {},
+    contact_form: {}
+  };
+}
 
 const poolConfig = {
   user: process.env.POSTGRES_USER,
@@ -84,8 +107,8 @@ const initDb = async () => {
         ALTER COLUMN password_hash DROP NOT NULL
       `);
     } catch (error) {
-      // La colonne est peut-être déjà nullable
-      if (!error.message.includes('already')) {
+      // La colonne est peut-être déjà nullable ou la table n'existe pas
+      if (!error.message.includes('already') && !error.message.includes('does not exist')) {
         console.warn('Note: Could not alter password_hash constraint:', error.message);
       }
     }
@@ -178,31 +201,8 @@ const seedContent = async () => {
 
     console.log('Seeding default content...');
 
-    // Contenu initial pour la page d'accueil
-    const initialContent = {
-      hero: {
-        title: 'Bienvenue à Batala La Rochelle',
-        subtitle: 'Découvrez notre association',
-        description: 'Association de danse et de musique du monde'
-      },
-      sections: [
-        {
-          id: 'about',
-          title: 'À propos de nous',
-          content: 'Batala La Rochelle est une association dynamique dédiée à la promotion de la danse et la musique du Brésil.'
-        },
-        {
-          id: 'activities',
-          title: 'Nos activités',
-          content: 'Cours de samba, batucada, spectacles et événements culturels toute l\'année.'
-        },
-        {
-          id: 'contact',
-          title: 'Nous contacter',
-          content: 'Rejoignez notre communauté vibrante!'
-        }
-      ]
-    };
+    // Contenu initial complet pour la page d'accueil basé sur data.json
+    const initialContent = initialContentFromFile;
 
     // Insérer le contenu initial
     await query(

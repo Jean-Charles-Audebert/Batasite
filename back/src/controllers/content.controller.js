@@ -14,9 +14,14 @@ const { sendValidationError } = require('../utils/validation.helpers');
  */
 const getContent = async (req, res, next) => {
   try {
-    const content = await contentModel.getContent();
+    const result = await contentModel.getContent();
     log.info('Content retrieved by:', req.user.email);
-    res.json(content);
+    // Renvoyer avec wrapping pour cohérence avec le frontend
+    res.json({
+      content: result.content || {},
+      id: result.id,
+      updated_at: result.updated_at
+    });
   } catch (error) {
     error.status = 500;
     next(error);
@@ -39,10 +44,14 @@ const updateContent = async (req, res, next) => {
     }
 
     // Update
-    const updatedContent = await contentModel.updateContent(data, req.user.id);
+    const result = await contentModel.updateContent(data, req.user.id);
 
     log.info('Content updated by:', req.user.email);
-    res.json(updatedContent);
+    res.json({
+      content: result.content || {},
+      id: result.id,
+      updated_at: result.updated_at
+    });
   } catch (error) {
     error.status = error.status || 500;
     next(error);
@@ -65,10 +74,14 @@ const patchContent = async (req, res, next) => {
     }
 
     // Patch (merge)
-    const patchedContent = await contentModel.patchContent(partialData, req.user.id);
+    const result = await contentModel.patchContent(partialData, req.user.id);
 
     log.info('Content patched by:', req.user.email);
-    res.json(patchedContent);
+    res.json({
+      content: result.content || {},
+      id: result.id,
+      updated_at: result.updated_at
+    });
   } catch (error) {
     error.status = error.status || 500;
     next(error);
@@ -83,10 +96,10 @@ const getContentHistory = async (req, res, next) => {
   try {
     const limit = Math.min(parseInt(req.query.limit) || 20, 100); // Max 100
 
-    const history = await contentModel.getContentHistory(limit);
+    const versions = await contentModel.getContentHistory(limit);
 
     log.info('Content history retrieved by:', req.user.email);
-    res.json(history);
+    res.json({ versions });
   } catch (error) {
     error.status = 500;
     next(error);
