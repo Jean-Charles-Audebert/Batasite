@@ -4,7 +4,7 @@ const path = require("path");
 require('dotenv').config();
 
 // Charger data.json depuis le répertoire front
-const dataPath = path.join(__dirname, "../../front/data.json");
+const dataPath = path.join(__dirname, "../../../front/data.json");
 
 let initialContentFromFile = {};
 

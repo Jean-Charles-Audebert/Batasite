@@ -111,28 +111,28 @@
       "position": {
         "grid-column": "2/12"
       },
-          "src": "public/pres_deco.png",
-          "alt": "Présentation de Batala",
-          "grid-column": "span 5"
-        },
-        "text": [
-          "Nous appartenons à Batala, groupe international composé de plus de 3000 percussionnistes répartis sur 4 continents ! En 2000, Giba Gonçalves, d'origine bahianaise (NE Brésil), créa notre groupe rochelais avec une quinzaine de membres, qui travaillèrent intensément pour effectuer les premières sorties en public.",
-          "Peu à peu, notre association s'est agrandie, attirant des personnes conquises par cette musique. Aujourd'hui, une cinquantaine de musiciens, de tous âges et de différents horizons, participe à la vie de notre association et assure la promotion de la culture brésilienne.",
-          "Ouverts à tous, nous invitons régulièrement d'autres batucadas et groupes Batala. Nous participons régulièrement à des rencontres inter-batucadas (ex : Nuits Frappées de Bruniquel) pour partager un stage, un week-end convivial, une prestation, un concert …",
-          "Nous sillonnons la France et l'Europe, participons avec énergie et bonne humeur aux animations culturelles de plein air (fêtes de quartiers, carnavals de rue, festivals, évènements sportifs, fêtes communales), mais aussi sur scène ou lors de soirées privées."
-        ],
-        "title_style": {
-          "font-size": "2.5rem",
-          "color": "#000",
-          "font-family": "",
-          "font-weight": ""
-        },
-        "text_style": {
-          "font-size": "1rem",
-          "color": "#000",
-          "font-family": "",
-          "line-height": "1.5"
-        }
+      "image": {
+        "src": "public/pres_deco.png",
+        "alt": "Présentation de Batala",
+        "grid-column": "span 5"
+      },
+      "text": [
+        "Nous appartenons à Batala, groupe international composé de plus de 3000 percussionnistes répartis sur 4 continents ! En 2000, Giba Gonçalves, d'origine bahianaise (NE Brésil), créa notre groupe rochelais avec une quinzaine de membres, qui travaillèrent intensément pour effectuer les premières sorties en public.",
+        "Peu à peu, notre association s'est agrandie, attirant des personnes conquises par cette musique. Aujourd'hui, une cinquantaine de musiciens, de tous âges et de différents horizons, participe à la vie de notre association et assure la promotion de la culture brésilienne.",
+        "Ouverts à tous, nous invitons régulièrement d'autres batucadas et groupes Batala. Nous participons régulièrement à des rencontres inter-batucadas (ex : Nuits Frappées de Bruniquel) pour partager un stage, un week-end convivial, une prestation, un concert …",
+        "Nous sillonnons la France et l'Europe, participons avec énergie et bonne humeur aux animations culturelles de plein air (fêtes de quartiers, carnavals de rue, festivals, évènements sportifs, fêtes communales), mais aussi sur scène ou lors de soirées privées."
+      ],
+      "title_style": {
+        "font-size": "2.5rem",
+        "color": "#000",
+        "font-family": "",
+        "font-weight": ""
+      },
+      "text_style": {
+        "font-size": "1rem",
+        "color": "#000",
+        "font-family": "",
+        "line-height": "1.5"
       }
     },
     {
@@ -195,14 +195,14 @@
           "id": "event-2",
           "image": "public/fab.jpg",
           "title": "Carnaval de Thairé",
-          "description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea",
+          "description": "Lorem ipsum dolor sit amet...",
           "visible": true
         },
         {
           "id": "event-3",
           "image": "public/fab.jpg",
           "title": "Les mimosas à Saint Trojean",
-          "description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea",
+          "description": "Lorem ipsum dolor sit amet...",
           "visible": true
         }
       ]
@@ -210,16 +210,16 @@
     {
       "type": "separator",
       "id": "separator-1",
+      "visible": true,
       "media": {
         "src": "public/separator_red.mp4",
         "type": "video",
         "alt": ""
       },
       "style": {
-        "margin-top": "-12rem",
-        "z-index": 5
-      },
-      "visible": true
+        "margin": "0",
+        "padding": "0"
+      }
     },
     {
       "type": "mundo",
@@ -227,29 +227,11 @@
       "title": "Batala Mundo",
       "visible": true,
       "style": {
-        "background-color": "#fff",
-        "background-image": "public/feuille.png",
-        "background-repeat": "no-repeat",
-        "background-position": "right"
+        "background-color": "",
+        "color": "#000"
       },
       "position": {
         "grid-column": "1/-1"
-      },
-      "title_style": {
-        "font-size": "2.5rem",
-        "text-align": "center",
-        "color": "#000",
-        "margin-bottom": "2rem"
-      },
-      "text_style": {
-        "font-size": "0.95rem",
-        "color": "#000",
-        "line-height": "1.6"
-      },
-      "media_style": {
-        "width": "100%",
-        "margin-bottom": "2rem",
-        "border-radius": "0"
       },
       "content": {
         "media": {
@@ -269,103 +251,84 @@
     {
       "type": "separator",
       "id": "separator-2",
+      "visible": true,
       "media": {
-        "src": "public/separator_black.mp4",
+        "src": "public/separator_red.mp4",
         "type": "video",
         "alt": ""
       },
       "style": {
-        "margin-top": "-12rem",
-        "z-index": 5
-      },
-      "visible": true
+        "margin": "0",
+        "padding": "0"
+      }
     },
     {
       "type": "gallery",
       "id": "gallery",
-      "title": "Photos & Vidéos",
+      "title": "Photos et vidéos",
       "visible": true,
       "style": {
-        "background-color": "#fff",
-        "background-image": ""
+        "background-color": "",
+        "color": "#000"
       },
       "position": {
         "grid-column": "2/12"
       },
-      "title_style": {
-        "font-size": "2.5rem",
-        "text-align": "center",
-        "color": "#000",
-        "margin-bottom": "3rem"
-      },
-      "image_style": {
-        "border-radius": "0",
-        "box-shadow": "none",
-        "filter": "grayscale(0%)",
-        "filter_hover": "grayscale(100%)"
-      },
-      "gallery_layout": {
-        "display": "grid",
-        "grid-template-columns": "repeat(3, 1fr)",
-        "gap": "1rem"
-      },
       "images": [
         {
           "id": "img-1",
-          "src": "public/fab.jpg",
-          "alt": "Photo de Batala La Rochelle en performance extérieure",
-          "link": "public/fab.jpg",
+          "src": "public/japan.png",
+          "alt": "Photo de Batala La Rochelle en performance",
+          "link": "public/japan.png",
           "visible": true
         },
         {
           "id": "img-2",
-          "src": "public/japan.png",
+          "src": "public/japan2.jpg",
           "alt": "Photo de Batala La Rochelle en performance extérieure",
-          "link": "public/japan.png",
+          "link": "public/japan2.jpg",
           "visible": true
         },
         {
           "id": "img-3",
-          "src": "public/japan2.jpg",
-          "alt": "Photo de Batala La Rochelle en performance extérieure",
-          "link": "public/japan2.jpg",
-          "visible": true
-        },
-        {
-          "id": "img-4",
           "src": "public/fab.jpg",
-          "alt": "Photo de Batala La Rochelle en performance extérieure",
+          "alt": "Photo de Batala La Rochelle",
           "link": "public/fab.jpg",
           "visible": true
         },
         {
-          "id": "img-5",
+          "id": "img-4",
           "src": "public/japan.png",
-          "alt": "Photo de Batala La Rochelle en performance extérieure",
+          "alt": "Photo de Batala La Rochelle en performance",
           "link": "public/japan.png",
           "visible": true
         },
         {
-          "id": "img-6",
+          "id": "img-5",
           "src": "public/japan2.jpg",
           "alt": "Photo de Batala La Rochelle en performance extérieure",
           "link": "public/japan2.jpg",
+          "visible": true
+        },
+        {
+          "id": "img-6",
+          "src": "public/fab.jpg",
+          "alt": "Photo de Batala La Rochelle",
+          "link": "public/fab.jpg",
           "visible": true
         }
       ],
       "videos": [
         {
           "id": "video-1",
-          "src": "2WPplCREC1c",
-          "type": "youtube",
-          "title": "YouTube video player",
+          "src": "https://www.youtube.com/embed/2WPplCREC1c?rel=0",
+          "title": "Batala La Rochelle en action",
           "visible": true
         },
         {
           "id": "video-2",
-          "src": "xbZVTo_9Bfg",
-          "type": "youtube",
-          "title": "YouTube video player",
+          "src": "https://www.youtube.com/embed/xbZVTo_9Bfg?rel=0",
+          "title": "Batala La Rochelle performance",
           "visible": true
         }
       ]
@@ -498,24 +461,7 @@
         "type": "text",
         "required": true,
         "placeholder": ""
-      },
-      {
-        "id": "email",
-        "label": "Email :",
-        "type": "email",
-        "required": true,
-        "placeholder": ""
-      },
-      {
-        "id": "message",
-        "label": "Message :",
-        "type": "textarea",
-        "required": true,
-        "rows": 4,
-        "placeholder": ""
       }
-    ],
-    "submit_label": "Envoyer",
-    "modal_title": "Contactez Batala La Rochelle"
+    ]
   }
 }

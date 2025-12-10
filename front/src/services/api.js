@@ -194,14 +194,14 @@ class ApiService {
    * Mettre à jour le contenu global
    */
   updateContent(data) {
-    return this.put('/content', data);
+    return this.put('/content', { data });
   }
 
   /**
    * Patch du contenu (merge partiel)
    */
   patchContent(data) {
-    return this.patch('/content', data);
+    return this.patch('/content', { data });
   }
 
   /**

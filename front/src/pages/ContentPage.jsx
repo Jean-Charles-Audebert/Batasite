@@ -1,27 +1,31 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
 import api from '../services/api';
-import { JsonEditor } from '../components/JsonEditor';
+import ContentPreview from '../components/ContentPreview';
+import ContentEditor from '../components/ContentEditor';
 import { useNotification } from '../contexts/NotificationContext';
 import styles from './ContentPage.module.css';
 
 /**
  * US-2.2: Page de gestion du contenu global
- * - Affichage du contenu actuel
- * - Formulaire d'édition
- * - Historique des versions
+ * Layout: 
+ * - Sidebar gauche (nav + logo + éditeur + boutons + nav bas)
+ * - Preview droite (iframe plein écran)
+ * 
+ * État local du JSON modifié avant sauvegarde
  */
 export function ContentPage() {
+  const navigate = useNavigate();
+  const auth = React.useContext(AuthContext);
   const { success, error: notifyError } = useNotification();
   const [content, setContent] = useState(null);
-  const [editing, setEditing] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [editContent, setEditContent] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
-  const [showHistory, setShowHistory] = useState(false);
-  const [history, setHistory] = useState([]);
-  const [historyLoading, setHistoryLoading] = useState(false);
 
-  // Charger le contenu
+  // Charger le contenu initial
   useEffect(() => {
     loadContent();
   }, []);
@@ -31,228 +35,115 @@ export function ContentPage() {
       setLoading(true);
       setError(null);
       const data = await api.getContent();
+      console.log('Contenu chargé:', data.content);
       setContent(data.content || {});
-      setFormData(data.content || {});
+      setEditContent(data.content || {}); // Initialiser l'état d'édition
     } catch (err) {
-      setError(err.message || 'Erreur lors du chargement du contenu');
+      console.error('Erreur chargement:', err);
+      const msg = err.message || 'Erreur lors du chargement du contenu';
+      setError(msg);
+      notifyError(msg);
     } finally {
       setLoading(false);
     }
   };
 
-  const loadHistory = async () => {
-    try {
-      setHistoryLoading(true);
-      const data = await api.getContentHistory(1, 10);
-      setHistory(data.versions || []);
-      setShowHistory(true);
-    } catch (err) {
-      setError(err.message || 'Erreur lors du chargement de l\'historique');
-    } finally {
-      setHistoryLoading(false);
-    }
+  const handleEditChange = (newContent) => {
+    setEditContent(newContent);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    // Si c'est un changement depuis JsonEditor
-    if (name === '__json__') {
-      setFormData(value);
-    } else {
-      // Sinon c'est un champ texte
-      setFormData(prev => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
   const handleSave = async () => {
     try {
-      setLoading(true);
+      setSaving(true);
       setError(null);
-      await api.updateContent(formData);
-      setContent(formData);
-      setEditing(false);
+      await api.updateContent(editContent);
+      setContent(editContent);
       success('Contenu sauvegardé avec succès');
-      // Recharger pour avoir le timestamp du serveur
-      await loadContent();
     } catch (err) {
       const msg = err.message || 'Erreur lors de la sauvegarde';
       setError(msg);
       notifyError(msg);
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
 
-  const handleCancel = () => {
-    setFormData(content || {});
-    setEditing(false);
-  };
-
-  const handleRestore = async (version) => {
-    if (!window.confirm(`Restaurer la version du ${new Date(version.updated_at).toLocaleString()} ?`)) {
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setError(null);
-      await api.updateContent(version.content);
-      setContent(version.content);
-      setFormData(version.content);
-      setShowHistory(false);
-      success('Version restaurée avec succès');
-      await loadContent();
-    } catch (err) {
-      const msg = err.message || 'Erreur lors de la restauration';
-      setError(msg);
-      notifyError(msg);
-    } finally {
-      setLoading(false);
-    }
+  const handleLogout = async () => {
+    await auth.logout();
+    navigate('/login', { replace: true });
   };
 
   if (loading && !content) {
     return (
-      <div className={styles.container}>
-        <p>Chargement...</p>
+      <div className={styles.pageLayout}>
+        <div className={styles.loadingMessage}>⏳ Chargement du contenu...</div>
       </div>
     );
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h2>Gestion du Contenu Global</h2>
-        <div className={styles.actions}>
-          <button
-            onClick={loadHistory}
-            disabled={loading}
-            className={styles.secondaryButton}
-          >
-            Historique
-          </button>
-          {!editing ? (
+    <div className={styles.pageLayout}>
+      {/* Sidebar Gauche - Navigation + Éditeur */}
+      <aside className={styles.sidebar}>
+        {/* Logo */}
+        <div className={styles.logo}>
+          <h2>Batasite</h2>
+        </div>
+
+        {/* Section Contenu */}
+        <div className={styles.contentSection}>
+          <div className={styles.sectionTitle}>📄 Contenu</div>
+          
+          {/* Éditeur */}
+          <div className={styles.editorWrapper}>
+            <ContentEditor
+              content={editContent || {}}
+              onChange={handleEditChange}
+              error={error}
+            />
+          </div>
+        </div>
+
+        {/* Séparation */}
+        <div className={styles.divider}></div>
+
+        {/* Navigation Bas */}
+        <div className={styles.navBottom}>
+          <div className={styles.actionButtons}>
             <button
-              onClick={() => setEditing(true)}
-              disabled={loading}
-              className={styles.primaryButton}
+              className={styles.saveButton}
+              onClick={handleSave}
+              disabled={saving}
             >
-              Modifier
+              {saving ? '⏳ Sauvegarde...' : '💾 Sauvegarder'}
             </button>
-          ) : (
-            <>
-              <button
-                onClick={handleSave}
-                disabled={loading}
-                className={styles.primaryButton}
-              >
-                {loading ? 'Sauvegarde...' : 'Sauvegarder'}
-              </button>
-              <button
-                onClick={handleCancel}
-                disabled={loading}
-                className={styles.secondaryButton}
-              >
-                Annuler
-              </button>
-            </>
-          )}
+            <button
+              className={styles.cancelButton}
+              onClick={() => window.location.reload()}
+              disabled={saving}
+            >
+              ✕ Annuler
+            </button>
+          </div>
+          
+          <div className={styles.separator}></div>
+
+          <button
+            className={styles.adminButton}
+            onClick={() => navigate('/admin')}
+          >
+            👥 Administrateurs
+          </button>
+          <button className={styles.logoutButton} onClick={handleLogout}>
+            Déconnexion
+          </button>
         </div>
-      </div>
+      </aside>
 
-      {error && <div className={styles.error}>{error}</div>}
-
-      {showHistory ? (
-        <HistoryView
-          history={history}
-          loading={historyLoading}
-          onRestore={handleRestore}
-          onClose={() => setShowHistory(false)}
-        />
-      ) : editing ? (
-        <ContentEditor
-          data={formData}
-          onChange={handleChange}
-          loading={loading}
-        />
-      ) : (
-        <ContentView data={content} />
-      )}
-    </div>
-  );
-}
-
-/**
- * Affichage du contenu actuel
- */
-function ContentView({ data }) {
-  const safeData = data || {};
-  return (
-    <div className={styles.content}>
-      <div className={styles.contentBox}>
-        <h3>Contenu Actuel</h3>
-        {Object.keys(safeData).length === 0 ? (
-          <p className={styles.empty}>Aucun contenu pour le moment</p>
-        ) : (
-          <JsonEditor data={safeData} onChange={() => {}} disabled={true} />
-        )}
-      </div>
-    </div>
-  );
-}
-
-/**
- * Formulaire d'édition du contenu
- */
-function ContentEditor({ data, onChange, loading }) {
-  return (
-    <div className={styles.editor}>
-      <JsonEditor data={data} onChange={onChange} disabled={loading} />
-    </div>
-  );
-}
-
-/**
- * Affichage de l'historique des versions
- */
-function HistoryView({ history, loading, onRestore, onClose }) {
-  return (
-    <div className={styles.historyContainer}>
-      <div className={styles.historyHeader}>
-        <h3>Historique des Versions</h3>
-        <button onClick={onClose} className={styles.closeButton}>✕</button>
-      </div>
-
-      {loading ? (
-        <p>Chargement de l'historique...</p>
-      ) : history.length === 0 ? (
-        <p className={styles.empty}>Aucun historique disponible</p>
-      ) : (
-        <div className={styles.historyList}>
-          {history.map((version, idx) => (
-            <div key={idx} className={styles.historyItem}>
-              <div className={styles.historyInfo}>
-                <p>
-                  <strong>Version {history.length - idx}</strong>
-                  {' - '}
-                  {new Date(version.updated_at).toLocaleString()}
-                </p>
-                <p className={styles.historyPreview}>
-                  {JSON.stringify(version.content).substring(0, 100)}...
-                </p>
-              </div>
-              <button
-                onClick={() => onRestore(version)}
-                className={styles.restoreButton}
-              >
-                Restaurer
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Preview Droite */}
+      <main className={styles.preview}>
+        {content && <ContentPreview content={editContent || content} />}
+      </main>
     </div>
   );
 }

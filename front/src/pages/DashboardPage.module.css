@@ -11,6 +11,8 @@
   display: flex;
   flex-direction: column;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  flex-shrink: 0;
 }
 
 .logo {
@@ -23,12 +25,24 @@
   font-size: 1.5rem;
 }
 
+/* Navigation haut */
 .nav {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0;
   padding: 1rem 0;
+  flex: 0 0 auto;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Navigation bas */
+.navBottom {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 1rem 0;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .navItem {
@@ -53,13 +67,9 @@
   border-left: 3px solid #764ba2;
 }
 
-.footer {
-  padding: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
 .logoutButton {
-  width: 100%;
+  width: calc(100% - 2rem);
+  margin: 0 1rem;
   padding: 0.75rem 1rem;
   background-color: #e74c3c;
   color: white;
@@ -78,25 +88,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-}
-
-.header {
-  background: white;
-  padding: 1.5rem;
-  border-bottom: 1px solid #ddd;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.header h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  color: #333;
-}
-
-.content {
-  flex: 1;
-  padding: 1.5rem;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 /* Responsive Design */
