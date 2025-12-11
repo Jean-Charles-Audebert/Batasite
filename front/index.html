@@ -14,13 +14,6 @@
       <img class="hero-image" src="public/header.svg" alt="Batala La Rochelle" />
       <img class="hero-logo" src="public/anim_logo_BATALA_LA_ROCHELLE.gif" alt="Logo Batala animé" />
       <div class="hero-content">
-        <!-- Liens internes : -->
-        <nav class="hero-nav">
-          <a href="#agenda" class="nav_link">Agenda</a>
-          <a href="#mundo" class="nav_link">Mundo</a>
-          <a href="#gallery" class="nav_link">Photos</a>
-          <a href="#contact" class="nav_link">Contact</a>
-        </nav>
         <!-- Réseaux sociaux : -->
         <nav class="hero-social">
           <a href="https://www.facebook.com/batalalarochelle" class="social_link" aria-label="Lien vers la page Facebook de Batala La Rochelle" target="_blank" rel="noopener noreferrer">
@@ -33,6 +26,7 @@
             <i class="fa-brands fa-youtube"></i>
           </a>
            <!-- <button class="btn-contact-modal-hero" aria-haspopup="dialog" aria-controls="contact-modal">Contact</button> -->
+            <p>batala.larochelle@gmail.com</p>
         </nav>
       </div>
     </section>
@@ -40,72 +34,7 @@
       <video src="/public/VIDEO.mp4" autoplay muted loop></video>
     </section>
   
-    <script src="main.js"></script>
-    <script>
-      // Contact form handler
-      document.addEventListener('DOMContentLoaded', function() {
-        const contactForm = document.getElementById('contact-form');
-        const contactModal = document.getElementById('contact-modal');
-        const closeBtn = document.querySelector('.close-contact-modal');
-        const contactBtns = document.querySelectorAll('.btn-contact-modal, .btn-contact-modal-hero');
-        const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-
-        // Open modal
-        contactBtns.forEach(btn => {
-          btn.addEventListener('click', () => {
-            contactModal.setAttribute('aria-hidden', 'false');
-            contactModal.style.display = 'block';
-          });
-        });
-
-        // Close modal
-        closeBtn.addEventListener('click', () => {
-          contactModal.setAttribute('aria-hidden', 'true');
-          contactModal.style.display = 'none';
-          contactForm.reset();
-        });
-
-        // Close modal when clicking outside
-        window.addEventListener('click', (e) => {
-          if (e.target === contactModal) {
-            contactModal.setAttribute('aria-hidden', 'true');
-            contactModal.style.display = 'none';
-            contactForm.reset();
-          }
-        });
-
-        // Submit form
-        contactForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-
-          const name = document.getElementById('name').value;
-          const email = document.getElementById('email').value;
-          const message = document.getElementById('message').value;
-
-          try {
-            const response = await fetch(`${API_BASE_URL}/contact/send`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ name, email, message }),
-            });
-
-            if (!response.ok) {
-              const error = await response.json();
-              throw new Error(error.error || 'Failed to send message');
-            }
-
-            alert('Message sent successfully! We will get back to you soon.');
-            contactModal.setAttribute('aria-hidden', 'true');
-            contactModal.style.display = 'none';
-            contactForm.reset();
-          } catch (error) {
-            alert('Error sending message: ' + error.message);
-          }
-        });
-      });
-    </script>
+    <script src="main.js"></script>   
   </body>
 </html>
         
