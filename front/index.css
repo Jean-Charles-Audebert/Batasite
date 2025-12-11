@@ -125,7 +125,12 @@ footer {
     font-size: 1.3rem;
 }
 
-.nav_link:hover {
+.nav_link {
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.nav_link:hover,
+.nav_link:focus-visible {
     transform: translateY(-2px);
     background: rgba(243, 242, 242, 0.3);
 }
@@ -141,9 +146,11 @@ footer {
 .social_link {
     color: #fff;
     font-size: 1.8rem;
+    transition: transform 0.3s ease;
 }
 
-.social_link:hover {
+.social_link:hover,
+.social_link:focus-visible {
     transform: scale(1.1);
 }
 
@@ -240,9 +247,11 @@ footer {
     padding: 1.5rem;
     border-radius: 1px;
     text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card:hover {
+.card:hover,
+.card:focus-visible {
     transform: translateY(-8px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
@@ -282,7 +291,6 @@ footer {
 }
 
 /* -----------------------------------
-/* -----------------------------------
    MUNDO
 ----------------------------------- */
 .mundo {
@@ -313,7 +321,7 @@ footer {
     font-size: 2.5rem;
     margin-bottom: 1rem;
 }
-/* -----------------------------------
+
 /* -----------------------------------
    GALLERY
 ----------------------------------- */
@@ -339,10 +347,11 @@ footer {
     width: 100%;
     display: block;
     filter: grayscale(0%);
-    transition: filter 0.3s ease;
+    transition: filter 0.3s ease, transform 0.3s ease;
 }
 
-.photos img:hover {
+.photos img:hover,
+.photos img:focus-visible {
     transform: scale(1.05);
     filter: grayscale(100%);
 }
@@ -367,7 +376,7 @@ footer {
     background: url("/public/footer.png") no-repeat center center / cover;
     padding: 4rem 2rem 2rem 2rem;
     color: #fff;
-    margin-top: -8rem;
+    margin-top: -25rem;
     margin-bottom: 2rem;
     position: relative;
     z-index: 10;
@@ -377,7 +386,6 @@ footer {
     justify-content: center;
     width: 100%;
     box-sizing: border-box;
-    margin-top: -25rem;
 }
 
 .container {
@@ -406,9 +414,11 @@ footer {
 .footer-nav a {
     color: #fff;
     text-decoration: none;
+    transition: text-decoration 0.3s ease;
 }
 
-.footer-nav a:hover {
+.footer-nav a:hover,
+.footer-nav a:focus-visible {
     text-decoration: underline;
 }
 
@@ -425,9 +435,11 @@ footer {
     padding: 0.4rem 0.8rem;
     font-size: 0.8rem;
     cursor: pointer;
+    transition: background 0.3s ease;
 }
 
-.btn-contact-modal:hover {
+.btn-contact-modal:hover,
+.btn-contact-modal:focus-visible {
     background: rgba(255, 255, 255, 0.1);
 }
 .footer-social {
@@ -440,6 +452,12 @@ footer {
 }
 .footer-social a {
     color: #fff;
+    transition: transform 0.3s ease;
+}
+
+.footer-social a:hover,
+.footer-social a:focus-visible {
+    transform: scale(1.1);
 }
 
 
@@ -510,7 +528,9 @@ footer {
 }
 
 .contact-modal-content input:focus,
-.contact-modal-content textarea:focus {
+.contact-modal-content input:focus-visible,
+.contact-modal-content textarea:focus,
+.contact-modal-content textarea:focus-visible {
     outline: none;
     border-color: #333;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
@@ -526,9 +546,11 @@ footer {
     cursor: pointer;
     font-weight: 700;
     margin-top: 0.5rem;
+    transition: background 0.3s ease;
 }
 
-.contact-modal-content button[type="submit"]:hover {
+.contact-modal-content button[type="submit"]:hover,
+.contact-modal-content button[type="submit"]:focus-visible {
     background: #555;
 }
 
@@ -578,6 +600,20 @@ footer p {
     .separator.pres-bg {
         margin-top: -12rem;
     }
+
+    .photos {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .videos {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .videos iframe {
+        width: 100%;
+        height: 300px;
+    }
 }
 
 /* ------------------------------
@@ -603,6 +639,12 @@ footer p {
     .videos iframe {
         grid-column: 1 / -1;
         width: 100%;
+    }
+
+    /* Forcer les vidéos YouTube en colonne unique */
+    .videos {
+        flex-direction: column;
+        align-items: center;
     }
 
     .separator.pres-bg {
