@@ -93,12 +93,22 @@ footer {
     overflow: hidden;
 }
 
-.hero-video {
+.hero-image {
     width: 100%;
     height: 400px;
     object-fit: cover;
     position: absolute;
     inset: 0;
+}
+
+.hero-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    width: 200px;
+    height: auto;
 }
 
 .hero-content {
@@ -361,18 +371,23 @@ footer {
 ----------------------------------- */
 
 footer {
-    background: url("/public/footer.png") no-repeat center center / cover;
-    padding: 4rem 2rem 2rem 2rem;
+    background: url("/public/FOOTER_construction.svg") no-repeat center bottom / contain;
     color: #fff;
     margin-top: -25rem;
     margin-bottom: 2rem;
     position: relative;
     z-index: 10;
-    height: 400px;
+    grid-column: 1 / -1;
+    width: 100%;
+    aspect-ratio: 16 / 5;
+    overflow: hidden;
+   
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100%;
+    padding: 4rem 2rem 2rem 2rem;
+    box-sizing: border-box;
+    
     box-sizing: border-box;
 }
 

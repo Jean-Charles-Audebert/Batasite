@@ -123,9 +123,11 @@ footer {
     color: #fff;
     text-decoration: none;
     font-size: 1.3rem;
+    transition: transform 0.3s ease, background 0.3s ease;
 }
 
-.nav_link:hover {
+.nav_link:hover,
+.nav_link:focus-visible {
     transform: translateY(-2px);
     background: rgba(243, 242, 242, 0.3);
 }
@@ -141,29 +143,21 @@ footer {
 .social_link {
     color: #fff;
     font-size: 1.8rem;
+    transition: transform 0.3s ease;
 }
 
-.social_link:hover {
+.social_link:hover,
+.social_link:focus-visible {
     transform: scale(1.1);
 }
 
 @media (max-width: 1099px) {
     .hero-nav {
-        grid-column: span 4;
-    }
-
-    .hero-social {
-        grid-column: span 4;
-    }
-}
-
-@media (max-width: 599px) {
-    .hero-nav {
         display: none;
     }
 
     .hero-social {
-        grid-column: span 8;
+        grid-column: 1 / -1;
         justify-content: center;
     }
 }
@@ -236,13 +230,15 @@ footer {
 
 .card {
     grid-column: span 4;
-    background: #bdbcbc;
+    background: #d6d5d5;
     padding: 1.5rem;
     border-radius: 1px;
     text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card:hover {
+.card:hover,
+.card:focus-visible {
     transform: translateY(-8px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
@@ -254,7 +250,8 @@ footer {
     transition: filter 0.3s ease;
 }
 
-.card img:hover {
+.card img:hover,
+.card img:focus-visible {
     filter: grayscale(100%);
 }
 
@@ -281,7 +278,6 @@ footer {
     z-index: 5;
 }
 
-/* -----------------------------------
 /* -----------------------------------
    MUNDO
 ----------------------------------- */
@@ -313,7 +309,7 @@ footer {
     font-size: 2.5rem;
     margin-bottom: 1rem;
 }
-/* -----------------------------------
+
 /* -----------------------------------
    GALLERY
 ----------------------------------- */
@@ -339,10 +335,11 @@ footer {
     width: 100%;
     display: block;
     filter: grayscale(0%);
-    transition: filter 0.3s ease;
+    transition: filter 0.3s ease, transform 0.3s ease;
 }
 
-.photos img:hover {
+.photos img:hover,
+.photos img:focus-visible {
     transform: scale(1.05);
     filter: grayscale(100%);
 }
@@ -367,7 +364,7 @@ footer {
     background: url("/public/footer.png") no-repeat center center / cover;
     padding: 4rem 2rem 2rem 2rem;
     color: #fff;
-    margin-top: -8rem;
+    margin-top: -25rem;
     margin-bottom: 2rem;
     position: relative;
     z-index: 10;
@@ -377,7 +374,6 @@ footer {
     justify-content: center;
     width: 100%;
     box-sizing: border-box;
-    margin-top: -25rem;
 }
 
 .container {
@@ -406,9 +402,11 @@ footer {
 .footer-nav a {
     color: #fff;
     text-decoration: none;
+    transition: text-decoration 0.3s ease;
 }
 
-.footer-nav a:hover {
+.footer-nav a:hover,
+.footer-nav a:focus-visible {
     text-decoration: underline;
 }
 
@@ -425,9 +423,11 @@ footer {
     padding: 0.4rem 0.8rem;
     font-size: 0.8rem;
     cursor: pointer;
+    transition: background 0.3s ease;
 }
 
-.btn-contact-modal:hover {
+.btn-contact-modal:hover,
+.btn-contact-modal:focus-visible {
     background: rgba(255, 255, 255, 0.1);
 }
 .footer-social {
@@ -440,6 +440,12 @@ footer {
 }
 .footer-social a {
     color: #fff;
+    transition: transform 0.3s ease;
+}
+
+.footer-social a:hover,
+.footer-social a:focus-visible {
+    transform: scale(1.1);
 }
 
 
@@ -510,7 +516,9 @@ footer {
 }
 
 .contact-modal-content input:focus,
-.contact-modal-content textarea:focus {
+.contact-modal-content input:focus-visible,
+.contact-modal-content textarea:focus,
+.contact-modal-content textarea:focus-visible {
     outline: none;
     border-color: #333;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
@@ -526,9 +534,11 @@ footer {
     cursor: pointer;
     font-weight: 700;
     margin-top: 0.5rem;
+    transition: background 0.3s ease;
 }
 
-.contact-modal-content button[type="submit"]:hover {
+.contact-modal-content button[type="submit"]:hover,
+.contact-modal-content button[type="submit"]:focus-visible {
     background: #555;
 }
 
@@ -545,4 +555,193 @@ footer {
 footer p {
     text-align: center;
     margin-top: 2rem;
+}
+
+/* ============================================================
+   RESPONSIVE SYSTEM SIMPLE ET PROPRE
+   4 BREAKPOINTS : 1536 / 1200 / 900 / 600
+   ============================================================ */
+
+/* ------------------------------
+   XL → écran large (≥1536px)
+------------------------------ */
+@media (min-width: 1536px) {
+    .separator.pres-bg {
+        margin-top: -22rem;
+        /* valeur originale */
+    }
+}
+
+/* ------------------------------
+   L → mid-desktop (1200 → 1535px)
+------------------------------ */
+@media (min-width: 1200px) and (max-width: 1535px) {
+    .separator.pres-bg {
+        margin-top: -18rem;
+    }
+}
+
+/* ------------------------------
+   M → tablettes landscape (900 → 1199px)
+------------------------------ */
+@media (min-width: 900px) and (max-width: 1199px) {
+    .separator.pres-bg {
+        margin-top: -12rem;
+    }
+
+    .photos {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .videos {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .videos iframe {
+        width: 100%;
+        height: 300px;
+    }
+
+    /* Footer responsive */
+    .container {
+        left: 1rem;
+        right: 1rem;
+        width: calc(100% - 2rem);
+    }
+}
+
+/* ------------------------------
+   S → tablette portrait & mobile large (<900px)
+------------------------------ */
+@media (max-width: 899px) {
+
+    /* Passer les grids en une seule colonne */
+    .presentation,
+    .mundo .section-container,
+    .agenda .cards-container,
+    .gallery .photos,
+    .gallery .videos {
+        grid-template-columns: 1fr;
+    }
+
+    /* Forcer les colonnes à full width */
+    .presentation-img,
+    .presentation-text,
+    .mundo .media,
+    .mundo .content,
+    .card,
+    .videos iframe {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    /* Forcer les vidéos YouTube en colonne unique */
+    .videos {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Footer - couleur unie au lieu de l'image */
+    footer {
+        background: #d04445;
+        height: auto;
+        min-height: auto;
+        padding: 2rem 1rem;
+        margin-top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    /* Footer responsive - passer à flexbox simple */
+    .container {
+        position: static;
+        flex-direction: column;
+        width: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        gap: 1.5rem;
+        padding: 0;
+    }
+
+    .footer-nav {
+        display: none;
+    }
+
+    .contact {
+        order: 1;
+    }
+
+    .footer-social {
+        width: 100%;
+        order: 2;
+    }
+
+    .separator.pres-bg {
+        margin-top: -8rem;
+        /* plus doux */
+    }
+}
+
+/* ------------------------------
+   XS → mobile (<600px)
+------------------------------ */
+@media (max-width: 599px) {
+
+    .presentation {
+        padding: 2rem 1rem;
+    }
+
+    .presentation-text h2 {
+        font-size: 1.8rem;
+    }
+
+    .presentation-text p {
+        font-size: 1rem;
+    }
+
+    /* Séparateurs reset mobile */
+    .separator {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    .separator.pres-bg {
+        margin-top: -4rem !important;
+    }
+
+    /* Footer mobile */
+    footer {
+        background: #d04445;
+        height: auto;
+        padding: 2rem 1rem 1rem 1rem;
+        margin-top: 0;
+    }
+
+    .container {
+        padding: 0;
+        gap: 1.5rem;
+    }
+
+    .footer-nav {
+        display: none;
+    }
+
+    .btn-contact-modal {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    .footer-social {
+        font-size: 1.1rem;
+        gap: 2rem;
+    }
+
+    .footer-copyright {
+        font-size: 0.65rem;
+        text-align: center;
+        padding-top: 0.5rem;
+    }
 }
