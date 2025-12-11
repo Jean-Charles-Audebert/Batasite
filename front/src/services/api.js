@@ -255,6 +255,17 @@ class ApiService {
   getAdminActivity(id, page = 1, limit = 20) {
     return this.get(`/admin/${id}/activity?page=${page}&limit=${limit}`);
   }
+
+  /**
+   * Envoyer un message de contact
+   */
+  sendContact(name, email, message) {
+    return this.post('/contact/send', {
+      name,
+      email,
+      message,
+    });
+  }
 }
 
 export default new ApiService();

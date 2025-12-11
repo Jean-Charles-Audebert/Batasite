@@ -103,12 +103,13 @@ footer {
 
 .hero-logo {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 48%;
+    left: 52.4%;
     transform: translate(-50%, -50%);
     z-index: 5;
     width: 200px;
     height: auto;
+    border: none;
 }
 
 .hero-content {
@@ -127,6 +128,7 @@ footer {
     gap: 1.5rem;
     grid-column: 2 / 5;
     justify-content: flex-end;
+    display: none;
 }
 
 .nav_link {
@@ -146,8 +148,9 @@ footer {
 .hero-social {
     display: flex;
     gap: 1rem;
-    grid-column: 9 / 13;
+    grid-column: 8 / 13;
     justify-content: flex-start;
+    margin-left: calc((100% / 13) * 1.5);
 }
 
 .social_link {
@@ -161,6 +164,21 @@ footer {
     transform: scale(1.1);
 }
 
+.btn-contact-modal-hero {
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-contact-modal-hero:hover,
+.btn-contact-modal-hero:focus-visible {
+    background: rgba(255, 255, 255, 0.1);
+}
+
 @media (max-width: 1099px) {
     .hero-nav {
         display: none;
@@ -170,6 +188,26 @@ footer {
         grid-column: 1 / -1;
         justify-content: center;
     }
+}
+
+/* -----------------------------------
+   CONSTRUCTION
+----------------------------------- */
+.construction {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.construction video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 /* -----------------------------------
