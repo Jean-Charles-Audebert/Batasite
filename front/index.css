@@ -123,9 +123,6 @@ footer {
     color: #fff;
     text-decoration: none;
     font-size: 1.3rem;
-}
-
-.nav_link {
     transition: transform 0.3s ease, background 0.3s ease;
 }
 
@@ -156,21 +153,11 @@ footer {
 
 @media (max-width: 1099px) {
     .hero-nav {
-        grid-column: span 4;
-    }
-
-    .hero-social {
-        grid-column: span 4;
-    }
-}
-
-@media (max-width: 599px) {
-    .hero-nav {
         display: none;
     }
 
     .hero-social {
-        grid-column: span 8;
+        grid-column: 1 / -1;
         justify-content: center;
     }
 }
@@ -243,7 +230,7 @@ footer {
 
 .card {
     grid-column: span 4;
-    background: #bdbcbc;
+    background: #d6d5d5;
     padding: 1.5rem;
     border-radius: 1px;
     text-align: center;
@@ -263,7 +250,8 @@ footer {
     transition: filter 0.3s ease;
 }
 
-.card img:hover {
+.card img:hover,
+.card img:focus-visible {
     filter: grayscale(100%);
 }
 
@@ -614,6 +602,13 @@ footer p {
         width: 100%;
         height: 300px;
     }
+
+    /* Footer responsive */
+    .container {
+        left: 1rem;
+        right: 1rem;
+        width: calc(100% - 2rem);
+    }
 }
 
 /* ------------------------------
@@ -647,6 +642,43 @@ footer p {
         align-items: center;
     }
 
+    /* Footer - couleur unie au lieu de l'image */
+    footer {
+        background: #d04445;
+        height: auto;
+        min-height: auto;
+        padding: 2rem 1rem;
+        margin-top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    /* Footer responsive - passer à flexbox simple */
+    .container {
+        position: static;
+        flex-direction: column;
+        width: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        gap: 1.5rem;
+        padding: 0;
+    }
+
+    .footer-nav {
+        display: none;
+    }
+
+    .contact {
+        order: 1;
+    }
+
+    .footer-social {
+        width: 100%;
+        order: 2;
+    }
+
     .separator.pres-bg {
         margin-top: -8rem;
         /* plus doux */
@@ -678,5 +710,38 @@ footer p {
 
     .separator.pres-bg {
         margin-top: -4rem !important;
+    }
+
+    /* Footer mobile */
+    footer {
+        background: #d04445;
+        height: auto;
+        padding: 2rem 1rem 1rem 1rem;
+        margin-top: 0;
+    }
+
+    .container {
+        padding: 0;
+        gap: 1.5rem;
+    }
+
+    .footer-nav {
+        display: none;
+    }
+
+    .btn-contact-modal {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    .footer-social {
+        font-size: 1.1rem;
+        gap: 2rem;
+    }
+
+    .footer-copyright {
+        font-size: 0.65rem;
+        text-align: center;
+        padding-top: 0.5rem;
     }
 }
