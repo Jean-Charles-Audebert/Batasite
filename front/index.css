@@ -185,8 +185,9 @@ footer {
     }
 
     .hero-social {
-        grid-column: 1 / -1;
-        justify-content: center;
+        grid-column: 8 / 13;
+        justify-content: flex-start;
+        margin-left: calc((100% / 13) * 1.5);
     }
 }
 
