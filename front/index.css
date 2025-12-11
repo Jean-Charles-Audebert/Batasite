@@ -55,7 +55,7 @@ html,
 body {
     font-family: "Lithos", sans-serif;
     font-weight: 400;
-    background: #ffffff;
+    background: #d04445;
     color: #000;
     scroll-behavior: smooth;
 }
@@ -64,6 +64,7 @@ body {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     width: 100%;
+    height: auto;
 }
 
 /* Utilitaires pour placer les sections dans la grille */
@@ -71,6 +72,9 @@ section,
 footer {
     grid-column: 1 / -1;
     width: 100%;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
 }
 
 /* -----------------------------------
@@ -81,6 +85,7 @@ footer {
     width: 100%;
     min-height: 400px;
     overflow: hidden;
+    display: block;
 }
 
 .hero-image {
@@ -147,9 +152,7 @@ footer {
     grid-column: 1 / -1;
     width: 100%;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
 }
 
 .construction video {
